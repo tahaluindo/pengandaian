@@ -20,7 +20,7 @@
   <style>
     .bg {
       /* The image used */
-      background-image: url("../../assets/images/bg.jpg");      
+      background-image: url("../../assets/images/bg.jpg");
 
       /* Center and scale the image nicely */
       background-position: center;
@@ -28,13 +28,13 @@
       background-size: cover;
     }
   </style>
-  
+
   <script src="<?php echo base_url('assets/jquery/') ?>jquery.js"></script>
   <script type="text/javascript">
     var $j = jQuery.noConflict();
-    $j(document).ready(function(){
-      $j('#checkbox').click(function(){
-        if($j(this).is(':checked')) {
+    $j(document).ready(function() {
+      $j('#checkbox').click(function() {
+        if ($j(this).is(':checked')) {
           $j('#password').attr('type', 'text');
         } else {
           $j('#password').attr('type', 'password');
@@ -65,14 +65,14 @@
         <span class="fa fa-lock form-control-feedback"></span>
       </div>
       <div class="row" style="margin-bottom:10px">
-          <div class="col-lg-12">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="checkbox">
-              <label class="form-check-label" for="flexCheckDefault" style="font-weight:10">
-                Show Password
-              </label>
-            </div>
+        <div class="col-lg-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="checkbox">
+            <label class="form-check-label" for="flexCheckDefault" style="font-weight:10">
+              Show Password
+            </label>
           </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-lg-12">

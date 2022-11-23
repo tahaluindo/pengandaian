@@ -36,17 +36,18 @@ class Auth extends CI_Controller
 
       $usertype_id = $this->Usertype_model->get_by_id($row->usertype_id);
       $instansi_id = $this->Instansi_model->get_by_id($row->instansi_id);
-      $cabang_id   = $this->Cabang_model->get_by_id($row->cabang_id);
-      $divisi_id   = $this->Divisi_model->get_by_id($row->divisi_id);
 
       if (!$row->username) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Username tidak ditemukan</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button>Username tidak ditemukan</div>');
         redirect('auth/login');
       } elseif ($instansi_is_active_check->is_active == '0') {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Instansi Anda sedang tidak aktif, silahkan perpanjang dan hubungi MASTERADMIN dulu</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button>Instansi Anda sedang tidak aktif, silahkan perpanjang dan hubungi MASTERADMIN dulu</div>');
         redirect('auth/login');
       } elseif ($row->is_active == 0) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Akun Anda sedang tidak Aktif</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+        </button>Akun Anda sedang tidak Aktif</div>');
         redirect('auth/login');
       } elseif (!password_verify($this->input->post('password'), $row->password)) {
         $log = $this->Auth_model->get_total_login_attempts_per_user($this->input->post('username'));
@@ -57,12 +58,12 @@ class Auth extends CI_Controller
 
           $this->Auth_model->clear_login_attempt($this->input->post('username'));
 
-          $this->session->set_flashdata('message', '<div class="alert alert-danger">Terlalu banyak percobaan login, akun Anda kami nonaktifkan sementara. Silahkan kontak SUPERADMIN untuk membukanya kembali.</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Terlalu banyak percobaan login, akun Anda kami nonaktifkan sementara. Silahkan kontak MASTERADMIN untuk membukanya kembali.</div>');
           redirect('auth/login');
         } else {
           $this->Auth_model->insert_login_attempt(array('ip_address' => $this->input->ip_address(), 'username' => $this->input->post('username')));
 
-          $this->session->set_flashdata('message', '<div class="alert alert-danger">Password Salah</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Password Salah</div>');
           redirect('auth/login');
         }
       } else {
@@ -79,10 +80,6 @@ class Auth extends CI_Controller
           'instansi_name'       => $instansi_id->instansi_name,
           'instansi_img'        => $instansi_id->instansi_img,
           'instansi_img_thumb'  => $instansi_id->instansi_img_thumb,
-          'cabang_id'           => $row->cabang_id,
-          'cabang_name'         => $cabang_id->cabang_name,
-          'divisi_id'           => $row->divisi_id,
-          'divisi_name'         => $divisi_id->divisi_name,
           'photo'               => $row->photo,
           'photo_thumb'         => $row->photo_thumb,
           'created_at'          => $row->created_at,
@@ -92,7 +89,7 @@ class Auth extends CI_Controller
 
         $this->Auth_model->update($this->session->id_users, array('last_login' => date('Y-m-d H:i:s')));
 
-        redirect('home');
+        redirect('admin/dashboard');
       }
     } else {
       $this->data['username'] = [
