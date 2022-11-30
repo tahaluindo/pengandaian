@@ -25,4 +25,14 @@ function date_only($string)
   $string = date("j F Y", strtotime($string));
   return $string;
 }
-?>
+
+function datetime_indo3($string)
+{
+  $datetime = $string;
+  $dt       = strtotime($datetime);
+  $string   = date("d/m/Y", $dt);
+
+  return $string;
+
+  //TODO output: 17/02/2019
+}

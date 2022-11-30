@@ -105,8 +105,8 @@
                                 </div>
                                 <hr>
                                 <div class="card-footer">
-                                    <button type="reset" class="btn btn-warning">Reset</button>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="reset" class="btn btn-warning"><?php echo $btn_reset ?></button>
+                                    <button type="submit" class="btn btn-primary"><?php echo $btn_submit ?></button>
                                 </div>
                                 <?php echo form_close() ?>
                             </div>

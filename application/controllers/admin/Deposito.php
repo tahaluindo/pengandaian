@@ -37,9 +37,7 @@ class Deposito extends CI_Controller
 
         $this->data['page_title'] = 'Data ' . $this->data['module'];
 
-        if (is_grandadmin()) {
-            $this->data['get_all'] = $this->Deposito_model->get_all();
-        }
+        $this->data['get_all'] = $this->Deposito_model->get_all();
 
         $this->load->view('back/deposito/deposito_list', $this->data);
     }
@@ -170,8 +168,8 @@ class Deposito extends CI_Controller
 
             write_log();
 
-            // $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
-            // redirect('admin/box');
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Success!</b></h6></div>');
+            redirect('admin/deposito');
         }
     }
 }

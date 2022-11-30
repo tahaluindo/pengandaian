@@ -10,9 +10,7 @@ class Deposito_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('deposito.id_deposito, deposito.name, instansi.instansi_name, deposito.created_by as created_by_deposito');
-
-        $this->db->join('instansi', 'deposito.instansi_id = instansi.id_instansi', 'left');
+        $this->db->select('deposito.id_deposito, deposito.name, deposito.nik, deposito.waktu_deposito, deposito.jatuh_tempo, deposito.created_by');
 
         $this->db->where('is_delete_deposito', '0');
 
