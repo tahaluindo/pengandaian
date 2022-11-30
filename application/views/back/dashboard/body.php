@@ -1,4 +1,7 @@
+<!-- Meta -->
 <?php $this->load->view('back/template/meta'); ?>
+</head>
+<!-- Meta -->
 
 <body id="page-top">
     <div id="wrapper">
@@ -14,15 +17,15 @@
                 <!-- Container Fluid-->
                 <div class="container-fluid" id="container-wrapper">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><?php echo $page_title ?></h1>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="./">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="<?php echo base_url('admin/dashboard') ?>">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><?php echo $page_title ?></li>
                         </ol>
                     </div>
 
                     <div class="row mb-2">
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Card Total Deposito -->
                         <div class="col-xl-6 col-md-6 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -38,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Earnings (Annual) Card Example -->
+                        <!-- Card Total Pembiayaan -->
                         <div class="col-xl-6 col-md-6 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -57,7 +60,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <!-- New User Card Example -->
+                        <!-- Card Saldo Pembiayaan -->
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -73,7 +76,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Card Total Deposan -->
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -89,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Earnings (Annual) Card Example -->
+                        <!-- Card Total Anggota -->
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -109,42 +112,14 @@
                     <!--Row-->
 
                     <!-- Modal Logout -->
-                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to logout?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                    <a href="login.html" class="btn btn-primary">Logout</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <?php $this->load->view('back/template/modal_logout'); ?>
+                    <!-- Modal Logout -->
                 </div>
-                <!---Container Fluid-->
+                <!--Container Fluid-->
             </div>
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>copyright &copy; <script>
-                                document.write(new Date().getFullYear());
-                            </script> - developed by
-                            <b><a href="https://indrijunanda.gitlab.io/" target="_blank">indrijunanda</a></b>
-                        </span>
-                    </div>
-                </div>
-            </footer>
-            <!-- Footer -->
+            <!-- Footer Copyright -->
+            <?php $this->load->view('back/template/footer_copyright'); ?>
+            <!-- Footer Copyright -->
         </div>
     </div>
 
@@ -152,9 +127,11 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+    <!-- Scroll to top -->
 
     <!-- Footer -->
     <?php $this->load->view('back/template/footer'); ?>
+    <!-- Footer -->
 </body>
 
 </html>

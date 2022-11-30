@@ -1,0 +1,46 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Deposito_model extends CI_Model
+{
+
+    public $table = 'deposito';
+    public $id    = 'id_deposito';
+    public $order = 'DESC';
+
+    function get_all()
+    {
+        $this->db->select('deposito.id_deposito, deposito.name, instansi.instansi_name, deposito.created_by as created_by_deposito');
+
+        $this->db->join('instansi', 'deposito.instansi_id = instansi.id_instansi', 'left');
+
+        $this->db->where('is_delete_deposito', '0');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function insert($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+
+    function update($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
+
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
+    }
+}

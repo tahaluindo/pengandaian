@@ -8,18 +8,16 @@ class Dashboard extends CI_Controller
 	{
 		parent::__construct();
 
+		$this->data['module'] = 'Dashboard';
+
 		$this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
-		$this->data['company_data']             = $this->Company_model->company_profile();
-		$this->data['layout_template']          = $this->Template_model->layout();
-		$this->data['skins_template']           = $this->Template_model->skins();
-		$this->data['footer']                   = $this->Footer_model->footer();
 
 		is_login();
 	}
 
 	public function index()
 	{
-		$this->data['page_title'] = 'Dashboard';
+		$this->data['page_title'] = $this->data['module'];
 
 		// if (is_grandadmin()) {
 		// 	$this->data['get_total_user']     			= $this->Auth_model->total_rows();
