@@ -297,4 +297,29 @@ class Deposito extends CI_Controller
             redirect('admin/deposito');
         }
     }
+
+    function delete($id)
+    {
+        is_delete();
+
+        $delete = $this->Deposito_model->get_by_id($id);
+
+        if ($delete) {
+            $data = array(
+                'is_delete_deposito'   => '1',
+                'deleted_by'           => $this->session->username,
+                'deleted_at'           => date('Y-m-d H:i:a'),
+            );
+
+            $this->Deposito_model->soft_delete($id, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dihapus!</b></h6></div>');
+            redirect('admin/deposito');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
+            redirect('admin/deposito');
+        }
+    }
 }
