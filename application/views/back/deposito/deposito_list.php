@@ -57,9 +57,9 @@
                                             <?php
                                             foreach ($get_all as $data) {
                                                 // Action
-                                                $edit = '<a href="#" id="editDeposito" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_deposito="' . $data->id_deposito . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . $data->total_deposito . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . $data->waktu_deposito . '" data-jatuh_tempo="' . $data->jatuh_tempo . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-pen"></i></a>';
+                                                $edit = '<a href="#" id="editDeposito" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_deposito="' . $data->id_deposito . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . $data->total_deposito . '" data-waktu_deposito="' . $data->waktu_deposito . '" data-jatuh_tempo="' . $data->jatuh_tempo . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="#" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" class="btn btn-sm btn-info" title="Detail Data"><i class="fas fa-info-circle"></i></a>';
+                                                $detail = '<a href="#" id="detailDeposito" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . $data->total_deposito . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . $data->waktu_deposito . '" data-jatuh_tempo="' . $data->jatuh_tempo . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
@@ -83,80 +83,12 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" style="max-width: 700px;" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit <?php echo $page_title ?></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <?php echo form_open($action) ?>
-                                <div class="modal-body">
-                                    <!-- Content -->
-                                    <div class="form-group">
-                                        <label>Nama Deposan</label>
-                                        <?php echo form_input($name) ?>
-                                        <small id="emailHelp" class="form-text text-muted">Isikan nama lengkap Deposan.</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>NIK</label>
-                                        <?php echo form_input($nik) ?>
-                                        <small id="emailHelp" class="form-text text-muted">Isikan nomor induk kependudukan sesuai KTP.</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Alamat</label>
-                                        <?php echo form_input($address) ?>
-                                        <small id="emailHelp" class="form-text text-muted">Isikan alamat lengkap sesuai KTP.</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <?php echo form_input($email) ?>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>No HP/Telephone/WhatsApp</label>
-                                        <div class="input-group mb-3">
-                                            <?php echo form_input($phone) ?>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Jumlah Deposito</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">RP</span>
-                                            </div>
-                                            <?php echo form_input($total_deposito) ?>
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">,00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="dateRangePicker">Jangka Waktu Deposito</label>
-                                        <div class="input-daterange input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                            </div>
-                                            <?php echo form_input($waktu_deposito) ?>
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">sampai dengan</span>
-                                            </div>
-                                            <?php echo form_input($jatuh_tempo) ?>
-                                        </div>
-                                    </div>
-                                    <!-- Content -->
-                                </div>
-                                <?php echo form_input($id_deposito) ?>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                                <?php echo form_close() ?>
-                            </div>
-                        </div>
-                    </div>
+                    <?php $this->load->view('back/deposito/modal_edit'); ?>
                     <!-- Modal Edit -->
+
+                    <!-- Modal detail -->
+                    <?php $this->load->view('back/deposito/modal_detail'); ?>
+                    <!-- Modal detail -->
                 </div>
                 <!--Container Fluid-->
             </div>
@@ -229,10 +161,8 @@
                 const email = $(this).data('email');
                 const phone = $(this).data('phone');
                 const total_deposito = $(this).data('total_deposito');
-                const jangka_waktu = $(this).data('jangka_waktu');
                 const waktu_deposito = $(this).data('waktu_deposito');
                 const jatuh_tempo = $(this).data('jatuh_tempo');
-                const bagi_hasil = $(this).data('bagi_hasil');
                 $('#id_deposito').val(id_deposito);
                 $('#name').val(name);
                 $('#nik').val(nik);
@@ -240,10 +170,31 @@
                 $('#email').val(email);
                 $('#phone').val(phone);
                 $('#total_deposito').val(total_deposito);
-                $('#jangka_waktu').val(jangka_waktu);
                 $('#waktu_deposito').val(waktu_deposito);
                 $('#jatuh_tempo').val(jatuh_tempo);
-                $('#bagi_hasil').val(bagi_hasil);
+            });
+
+            $(document).on('click', '#detailDeposito', function() {
+                const name = $(this).data('name');
+                const nik = $(this).data('nik');
+                const address = $(this).data('address');
+                const email = $(this).data('email');
+                const phone = $(this).data('phone');
+                const total_deposito = $(this).data('total_deposito');
+                const jangka_waktu = $(this).data('jangka_waktu');
+                const waktu_deposito = $(this).data('waktu_deposito');
+                const jatuh_tempo = $(this).data('jatuh_tempo');
+                const bagi_hasil = $(this).data('bagi_hasil');
+                $('.name').text(name);
+                $('.nik').text(nik);
+                $('.address').text(address);
+                $('.email').text(email);
+                $('.phone').text(phone);
+                $('.total_deposito').text(total_deposito);
+                $('.jangka_waktu').text(jangka_waktu);
+                $('.waktu_deposito').text(waktu_deposito);
+                $('.jatuh_tempo').text(jatuh_tempo);
+                $('.bagi_hasil').text(bagi_hasil);
             })
         });
     </script>
