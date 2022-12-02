@@ -322,4 +322,59 @@ class Deposito extends CI_Controller
             redirect('admin/deposito');
         }
     }
+
+    function deleted_list()
+    {
+        is_restore();
+
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        $this->data['get_all_deleted'] = $this->Deposito_model->get_all_deleted();
+
+        $this->load->view('back/deposito/deposito_deleted_list', $this->data);
+    }
+
+    function restore($id)
+    {
+        is_restore();
+
+        $row = $this->Deposito_model->get_by_id($id);
+
+        if ($row) {
+            $data = array(
+                'is_delete_deposito'   => '0',
+                'deleted_by'           => NULL,
+                'deleted_at'           => NULL,
+            );
+
+            $this->Deposito_model->update($id, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dikembalikan!</b></h6></div>');
+            redirect('admin/deposito/deleted_list');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
+            redirect('admin/deposito');
+        }
+    }
+
+    function delete_permanent($id)
+    {
+        is_delete();
+
+        $delete = $this->Deposito_model->get_by_id($id);
+
+        if ($delete) {
+            $this->Deposito_model->delete($id);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dihapus Secara Permanen!</b></h6></div>');
+            redirect('admin/deposito/deleted_list');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
+            redirect('admin/deposito');
+        }
+    }
 }

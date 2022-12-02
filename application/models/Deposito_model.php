@@ -19,6 +19,17 @@ class Deposito_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_deleted()
+    {
+        $this->db->select('deposito.id_deposito, deposito.name, deposito.nik, deposito.address, deposito.email, deposito.phone, deposito.total_deposito, deposito.jangka_waktu, deposito.waktu_deposito, deposito.jatuh_tempo, deposito.bagi_hasil, deposito.created_by');
+
+        $this->db->where('is_delete_deposito', '1');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
