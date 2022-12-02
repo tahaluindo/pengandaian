@@ -19,6 +19,9 @@ class Dashboard extends CI_Controller
 	{
 		$this->data['page_title'] = $this->data['module'];
 
+		$this->data['get_total_deposan']     			= $this->Deposito_model->total_rows();
+		$this->data['get_total_deposito']     			= $this->Deposito_model->total_deposito();
+
 		// if (is_grandadmin()) {
 		// 	$this->data['get_total_user']     			= $this->Auth_model->total_rows();
 		// 	$this->data['get_total_arsip']     			= $this->Arsip_model->total_rows();

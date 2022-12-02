@@ -40,7 +40,7 @@
                             <tr>
                                 <td>Jumlah Deposito</td>
                                 <td>:</td>
-                                <td>Rp. <span class="total_deposito"></span>,00</td>
+                                <td>Rp. <span class="total_deposito"></span></td>
                             </tr>
                             <tr>
                                 <td>Jangka Waktu</td>

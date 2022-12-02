@@ -32,7 +32,7 @@
                                     <div class="row align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-uppercase mb-1">Total Deposito</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RP 40,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RP <?php echo number_format($get_total_deposito[0]->total_deposito, 2, ',', '.') ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-credit-card fa-2x text-primary"></i>
@@ -83,7 +83,7 @@
                                     <div class="row align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-uppercase mb-1">Total Deposan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">21</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $get_total_deposan ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-success"></i>

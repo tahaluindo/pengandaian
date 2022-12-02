@@ -30,6 +30,17 @@ class Deposito_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function total_rows()
+    {
+        $this->db->where('is_delete_deposito', '0');
+        return $this->db->get($this->table)->num_rows();
+    }
+
+    function total_deposito()
+    {
+        return $this->db->query('SELECT sum(total_deposito) AS total_deposito from deposito where is_delete_deposito = 0')->result();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
