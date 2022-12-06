@@ -11,7 +11,6 @@ class Auth extends CI_Controller
     $this->data['module'] = 'Auth';
 
     $this->data['company_data']      = $this->Company_model->company_profile();
-    $this->data['footer']            = $this->Footer_model->footer();
 
     $this->data['btn_submit'] = 'Save';
     $this->data['btn_reset']  = 'Reset';
