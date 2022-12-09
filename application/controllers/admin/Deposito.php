@@ -19,11 +19,6 @@ class Deposito extends CI_Controller
 
         is_login();
 
-        if (is_admin() and is_pegawai()) {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
-            redirect('admin/dashboard');
-        }
-
         if ($this->uri->segment(2) != NULL) {
             menuaccess_check();
         } elseif ($this->uri->segment(3) != NULL) {
