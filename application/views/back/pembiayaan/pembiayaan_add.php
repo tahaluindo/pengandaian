@@ -34,6 +34,10 @@
                     <!--Row-->
                     <div class="row">
                         <div class="col-md-12">
+                            <?php if ($this->session->flashdata('message')) {
+                                echo $this->session->flashdata('message');
+                            }
+                            ?>
                             <!-- Content -->
                             <div class="card mb-4">
                                 <?php echo form_open($action) ?>
@@ -101,13 +105,13 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Jenis Barang Yang Digadai</label>
+                                                <label>Jenis Barang Yang Digadaikan</label>
                                                 <?php echo form_input($jenis_barang_gadai) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Berat/Nilai Barang Yang Digadai</label>
+                                                <label>Berat/Nilai Barang Yang Digadaikan</label>
                                                 <div class="input-group mb-3">
                                                     <?php echo form_input($berat_barang_gadai) ?>
                                                     <div class="input-group-append">
@@ -150,7 +154,7 @@
                                 <hr>
                                 <div class="card-footer">
                                     <button type="reset" class="btn btn-warning"><?php echo $btn_reset ?></button>
-                                    <button type="submit" class="btn btn-primary"><?php echo $btn_submit ?></button>
+                                    <button type="submit" class="btn btn-primary">Berikutnya</button>
                                 </div>
                                 <?php echo form_close() ?>
                             </div>

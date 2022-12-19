@@ -226,6 +226,7 @@ class Deposito extends CI_Controller
                 'phone'             => $phone,
                 'instansi_id'       => $this->session->instansi_id,
                 'total_deposito'    => (int) $total_deposito,
+                'saldo_deposito'    => (int) $total_deposito,
                 'jangka_waktu'      => $jangka_waktu_deposito,
                 'waktu_deposito'    => $this->input->post('waktu_deposito'),
                 'jatuh_tempo'       => $this->input->post('jatuh_tempo'),

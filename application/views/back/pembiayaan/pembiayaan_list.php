@@ -46,9 +46,9 @@
                                     <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>Nama Deposan</th>
+                                                <th>Nama</th>
                                                 <th>NIK</th>
-                                                <th>Jumlah Deposito</th>
+                                                <th>Jumlah Pinjaman</th>
                                                 <th>Dibuat Oleh</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -64,7 +64,7 @@
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
                                                     <td><?php echo $data->nik ?></td>
-                                                    <td><?php echo number_format($data->total_deposito, 0, ',', '.') ?></td>
+                                                    <td><?php echo number_format($data->jml_pinjaman, 0, ',', '.') ?></td>
                                                     <td><?php echo $data->created_by ?></td>
                                                     <td><?php echo $detail ?> <?php echo $edit ?> <?php echo $delete ?></td>
                                                 </tr>
