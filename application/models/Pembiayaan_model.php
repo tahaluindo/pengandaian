@@ -21,9 +21,9 @@ class Pembiayaan_model extends CI_Model
 
     function get_all_deleted()
     {
-        $this->db->select('deposito.id_deposito, deposito.name, deposito.nik, deposito.address, deposito.email, deposito.phone, deposito.total_deposito, deposito.jangka_waktu, deposito.waktu_deposito, deposito.jatuh_tempo, deposito.bagi_hasil, deposito.created_by');
+        $this->db->select('pembiayaan.id_pembiayaan, pembiayaan.name, pembiayaan.nik, pembiayaan.jml_pinjaman, pembiayaan.created_by');
 
-        $this->db->where('is_delete_deposito', '1');
+        $this->db->where('is_delete_pembiayaan', '1');
 
         $this->db->order_by($this->id, $this->order);
 

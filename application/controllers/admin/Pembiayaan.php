@@ -611,6 +611,17 @@ class Pembiayaan extends CI_Controller
         }
     }
 
+    function deleted_list()
+    {
+        is_restore();
+
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        $this->data['get_all_deleted'] = $this->Pembiayaan_model->get_all_deleted();
+
+        $this->load->view('back/pembiayaan/pembiayaan_deleted_list', $this->data);
+    }
+
     function konversi_nominal($persentase = '')
     {
         $total_pinjaman = $this->session->total_pinjaman;
