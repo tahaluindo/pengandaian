@@ -647,6 +647,25 @@ class Pembiayaan extends CI_Controller
         }
     }
 
+    function delete_permanent($id)
+    {
+        is_delete();
+
+        $delete = $this->Pembiayaan_model->get_by_id($id);
+
+        if ($delete) {
+            $this->Pembiayaan_model->delete($id);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dihapus Secara Permanen!</b></h6></div>');
+            redirect('admin/pembiayaan/deleted_list');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
+            redirect('admin/pembiayaan');
+        }
+    }
+
     function konversi_nominal($persentase = '')
     {
         $total_pinjaman = $this->session->total_pinjaman;
