@@ -245,7 +245,7 @@ class Deposito extends CI_Controller
     function update_action()
     {
         $this->form_validation->set_rules('name', 'Nama Deposan', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('address', 'Alamat', 'required');
         $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
         $this->form_validation->set_rules('phone', 'No. HP/Telephone', 'is_numeric|required');

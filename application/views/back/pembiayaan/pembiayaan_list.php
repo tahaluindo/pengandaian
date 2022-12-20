@@ -7,6 +7,9 @@
 <!-- Bootstrap DatePicker -->
 <link href="<?php echo base_url('assets/bootstrap-datepicker/css/bootstrap-datepicker.min.css') ?>" rel="stylesheet">
 <!-- Bootstrap DatePicker -->
+<!-- Bootstrap Touchspin -->
+<link href="<?php echo base_url('assets/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css') ?>" rel="stylesheet">
+<!-- Bootstrap Touchspin -->
 </head>
 <!-- Meta -->
 
@@ -37,6 +40,7 @@
                             <?php if ($this->session->flashdata('message')) {
                                 echo $this->session->flashdata('message');
                             } ?>
+                            <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -97,7 +101,7 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <?php //$this->load->view('back/pembiayaan/modal_edit');
+                    <?php $this->load->view('back/pembiayaan/modal_edit');
                     ?>
                     <!-- Modal Edit -->
 
@@ -132,18 +136,28 @@
     <!-- maskMoney -->
     <script src="<?php echo base_url('assets/') ?>maskMoney/jquery.maskMoney.min.js"></script>
     <!-- maskMoney -->
+    <!-- Bootstrap Touchspin -->
+    <script src="<?php echo base_url('assets/') ?>bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
+    <!-- Bootstrap Touchspin -->
 
     <script>
         $(document).ready(function() {
-            $('#total_deposito').maskMoney({
+            $('#jml_pinjaman').maskMoney({
                 thousands: '.',
                 decimal: ',',
                 precision: 0
             });
-        });
 
-        $(document).ready(function() {
-            $('#waktu_deposito').datepicker({
+            $('#jangka_waktu_pinjam').TouchSpin({
+                min: 0,
+                max: 100,
+                postfix: 'Bulan',
+                initval: 0,
+                boostat: 5,
+                maxboostedstep: 10
+            });
+
+            $('#waktu_gadai').datepicker({
                 startView: 2,
                 format: 'yyyy/mm/dd',
                 autoclose: true,
@@ -151,7 +165,7 @@
                 todayBtn: 'linked',
             });
 
-            $('#jatuh_tempo').datepicker({
+            $('#jatuh_tempo_gadai').datepicker({
                 startView: 2,
                 format: 'yyyy/mm/dd',
                 autoclose: true,

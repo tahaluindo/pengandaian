@@ -152,6 +152,7 @@ class Pembiayaan extends CI_Controller
             ''              => '- Pilih Sumber Dana -',
             '1'             => 'Tabungan',
             '2'             => 'Deposito',
+            '3'             => 'Tabungan dan Deposito',
         ];
 
         $this->load->view('back/pembiayaan/pembiayaan_list', $this->data);
@@ -497,9 +498,6 @@ class Pembiayaan extends CI_Controller
         $this->session->set_userdata('nama_deposan', $new_array_deposan);
         $this->session->set_userdata('nominal_deposito', $new_array_nominal);
 
-        // var_dump($this->session->nama_deposan);
-        // die;
-
         if ($result > 0) {
             $this->session->set_userdata('total_pinjaman', $result);
 
@@ -512,6 +510,79 @@ class Pembiayaan extends CI_Controller
             redirect('admin/pembiayaan/sumber_dana_deposito');
         } else {
             redirect('admin/pembiayaan/sumber_dana_deposito');
+        }
+    }
+
+    function update_action()
+    {
+        $this->form_validation->set_rules('name', 'Nama Anggota', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
+        $this->form_validation->set_rules('phone', 'No. HP/Telephone', 'is_numeric|required');
+        $this->form_validation->set_rules('jml_pinjaman', 'Jumlah Pinjaman', 'required');
+        $this->form_validation->set_rules('jangka_waktu_pinjam', 'Jangka Waktu Pinjaman', 'is_numeric|required');
+        $this->form_validation->set_rules('jenis_barang_gadai', 'Jenis Barang Yang Digadaikan', 'required');
+        $this->form_validation->set_rules('berat_barang_gadai', 'Berat/Nilai Barang Yang Digadaikan', 'is_numeric|required');
+        $this->form_validation->set_rules('waktu_gadai', 'Waktu Gadai', 'required');
+        $this->form_validation->set_rules('jatuh_tempo_gadai', 'Jatuh Tempo Gadai', 'required');
+        $this->form_validation->set_rules('sistem_pembayaran_sewa', 'Sistem Pembayaran Sewa', 'required');
+        $this->form_validation->set_rules('sumber_dana', 'Sumber Dana', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
+        $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->index();
+        } else {
+            //Menentukan jangka waktu gadai
+            $waktu_gadai = date("Y-m-d", strtotime($this->input->post('waktu_gadai')));
+            $jatuh_tempo_gadai = date("Y-m-d", strtotime($this->input->post('jatuh_tempo_gadai')));
+            $tgl1 = new DateTime($waktu_gadai);
+            $tgl2 = new DateTime($jatuh_tempo_gadai);
+            $selisih = $tgl2->diff($tgl1);
+            $jangka_waktu_gadai = $selisih->m;
+
+            //Menentukan sewa tempat perbulan
+            $sewa_tempat_perbulan = 10000 * $this->input->post('berat_barang_gadai');
+
+            //Menentukan total biaya sewa
+            $total_biaya_sewa = $sewa_tempat_perbulan * $jangka_waktu_gadai;
+
+            //Ubah tipe data jml pinjaman
+            $string = $this->input->post('jml_pinjaman');
+            $jml_pinjaman = preg_replace("/[^0-9]/", "", $string);
+
+            $data = array(
+                'name'                      => $this->input->post('name'),
+                'nik'                       => $this->input->post('nik'),
+                'address'                   => $this->input->post('address'),
+                'email'                     => $this->input->post('email'),
+                'phone'                     => $this->input->post('phone'),
+                'instansi_id'               => $this->session->instansi_id,
+                'jml_pinjaman'              => (int) $jml_pinjaman,
+                'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
+                'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
+                'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
+                'waktu_gadai'               => $this->input->post('waktu_gadai'),
+                'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
+                'jangka_waktu_gadai'        => $jangka_waktu_gadai,
+                'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
+                'total_biaya_sewa'          => $total_biaya_sewa,
+                'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
+                'sumber_dana'               => $this->input->post('sumber_dana'),
+                'modified_by'               => $this->session->username,
+            );
+
+            $this->Pembiayaan_model->update($this->input->post('id_pembiayaan'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
+            redirect('admin/pembiayaan');
         }
     }
 
