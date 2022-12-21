@@ -37,6 +37,7 @@
                             <?php if ($this->session->flashdata('message')) {
                                 echo $this->session->flashdata('message');
                             } ?>
+                            <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -59,12 +60,12 @@
                                                 // Action
                                                 $edit = '<a href="#" id="editDeposito" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_deposito="' . $data->id_deposito . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . $data->total_deposito . '" data-waktu_deposito="' . $data->waktu_deposito . '" data-jatuh_tempo="' . $data->jatuh_tempo . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/deposito/delete/' . $data->id_deposito) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" id="detailDeposito" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . number_format($data->total_deposito, 2, ',', '.') . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . date_indonesian_only($data->waktu_deposito) . '" data-jatuh_tempo="' . date_indonesian_only($data->jatuh_tempo) . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-info-circle"></i></a>';
+                                                $detail = '<a href="#" id="detailDeposito" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . number_format($data->total_deposito, 2, ',', '.') . '" data-resapan_deposito="' . number_format($data->resapan_deposito, 2, ',', '.') . '" data-saldo_deposito="' . number_format($data->saldo_deposito, 2, ',', '.') . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . date_indonesian_only($data->waktu_deposito) . '" data-jatuh_tempo="' . date_indonesian_only($data->jatuh_tempo) . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
                                                     <td><?php echo $data->nik ?></td>
-                                                    <td><?php echo number_format($data->total_deposito, 0, ',', '.') ?></td>
+                                                    <td>Rp. <?php echo number_format($data->total_deposito, 0, ',', '.') ?></td>
                                                     <td><?php echo $data->created_by ?></td>
                                                     <td><?php echo $detail ?> <?php echo $edit ?> <?php echo $delete ?></td>
                                                 </tr>
@@ -181,6 +182,8 @@
                 const email = $(this).data('email');
                 const phone = $(this).data('phone');
                 const total_deposito = $(this).data('total_deposito');
+                const resapan_deposito = $(this).data('resapan_deposito');
+                const saldo_deposito = $(this).data('saldo_deposito');
                 const jangka_waktu = $(this).data('jangka_waktu');
                 const waktu_deposito = $(this).data('waktu_deposito');
                 const jatuh_tempo = $(this).data('jatuh_tempo');
@@ -191,6 +194,8 @@
                 $('.email').text(email);
                 $('.phone').text(phone);
                 $('.total_deposito').text(total_deposito);
+                $('.resapan_deposito').text(resapan_deposito);
+                $('.saldo_deposito').text(saldo_deposito);
                 $('.jangka_waktu').text(jangka_waktu);
                 $('.waktu_deposito').text(waktu_deposito);
                 $('.jatuh_tempo').text(jatuh_tempo);

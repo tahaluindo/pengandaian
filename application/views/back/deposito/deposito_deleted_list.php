@@ -42,8 +42,8 @@
                                             <tr>
                                                 <th>Nama Deposan</th>
                                                 <th>NIK</th>
-                                                <th>Waktu Deposito</th>
-                                                <th>Jatuh Tempo</th>
+                                                <th>Jumlah Deposito</th>
+                                                <th>Dibuat Oleh</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -57,8 +57,8 @@
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
                                                     <td><?php echo $data->nik ?></td>
-                                                    <td><?php echo datetime_indo3($data->waktu_deposito) ?></td>
-                                                    <td><?php echo datetime_indo3($data->jatuh_tempo) ?></td>
+                                                    <td>Rp. <?php echo number_format($data->total_deposito, 0, ',', '.') ?></td>
+                                                    <td><?php echo $data->created_by ?></td>
                                                     <td><?php echo $restore ?> <?php echo $delete ?></td>
                                                 </tr>
                                             <?php } ?>

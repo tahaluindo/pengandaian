@@ -55,7 +55,7 @@
                         </div>
                         <?php echo form_input($waktu_deposito) ?>
                         <div class="input-group-prepend">
-                            <span class="input-group-text">sampai dengan</span>
+                            <span class="input-group-text">-</span>
                         </div>
                         <?php echo form_input($jatuh_tempo) ?>
                     </div>

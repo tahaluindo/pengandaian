@@ -15,52 +15,62 @@
                             <tr>
                                 <td width="190px">Nama Deposan</td>
                                 <td width="5px">:</td>
-                                <td><span class="name"></span></td>
+                                <td><b><span class="name"></span></b></td>
                             </tr>
                             <tr>
                                 <td>NIK</td>
                                 <td>:</td>
-                                <td><span class="nik"></span></td>
+                                <td><b><span class="nik"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Alamat</td>
                                 <td>:</td>
-                                <td><span class="address"></span></td>
+                                <td><b><span class="address"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Email</td>
                                 <td>:</td>
-                                <td><span class="email"></span></td>
+                                <td><b><span class="email"></span></b></td>
                             </tr>
                             <tr>
                                 <td>No. HP/Telephone/WA</td>
                                 <td>:</td>
-                                <td><span class="phone"></span></td>
+                                <td><b>+<span class="phone"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Jumlah Deposito</td>
                                 <td>:</td>
-                                <td>Rp. <span class="total_deposito"></span></td>
+                                <td><b>Rp. <span class="total_deposito"></span></b></td>
+                            </tr>
+                            <tr>
+                                <td>Resapan Deposito</td>
+                                <td>:</td>
+                                <td><b>Rp. <span class="resapan_deposito"></span></b></td>
+                            </tr>
+                            <tr>
+                                <td>Saldo Deposito</td>
+                                <td>:</td>
+                                <td><b>Rp. <span class="saldo_deposito"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Jangka Waktu</td>
                                 <td>:</td>
-                                <td><span class="jangka_waktu"></span> Tahun</td>
+                                <td><b><span class="jangka_waktu"></span> Tahun</b></td>
                             </tr>
                             <tr>
                                 <td>Waktu Deposito</td>
                                 <td>:</td>
-                                <td><span class="waktu_deposito"></span></td>
+                                <td><b><span class="waktu_deposito"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Jatuh Tempo</td>
                                 <td>:</td>
-                                <td><span class="jatuh_tempo"></span></td>
+                                <td><b><span class="jatuh_tempo"></span></b></td>
                             </tr>
                             <tr>
                                 <td>Bagi Hasil</td>
                                 <td>:</td>
-                                <td>Rp. <span class="bagi_hasil"></span>,00</td>
+                                <td><b>Rp. <span class="bagi_hasil"></span>,00</b></td>
                             </tr>
                         </tbody>
                     </table>

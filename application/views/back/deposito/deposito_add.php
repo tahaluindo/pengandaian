@@ -31,6 +31,10 @@
                     <!--Row-->
                     <div class="row">
                         <div class="col-md-12">
+                            <?php if ($this->session->flashdata('message')) {
+                                echo $this->session->flashdata('message');
+                            } ?>
+                            <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
                                 <?php echo form_open($action) ?>
@@ -97,7 +101,7 @@
                                             </div>
                                             <?php echo form_input($waktu_deposito) ?>
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text">sampai dengan</span>
+                                                <span class="input-group-text">-</span>
                                             </div>
                                             <?php echo form_input($jatuh_tempo) ?>
                                         </div>

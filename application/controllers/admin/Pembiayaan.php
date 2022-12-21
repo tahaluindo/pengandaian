@@ -55,6 +55,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('nik'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -80,6 +81,7 @@ class Pembiayaan extends CI_Controller
             'required'      => '',
             'placeholder'   => '8xxxxxxxxxx',
             'value'         => $this->form_validation->set_value('phone'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['jml_pinjaman'] = [
             'name'          => 'jml_pinjaman',
@@ -96,6 +98,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('jangka_waktu_pinjam'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['jenis_barang_gadai'] = [
             'name'          => 'jenis_barang_gadai',
@@ -112,6 +115,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('berat_barang_gadai'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['waktu_gadai'] = [
             'name'          => 'waktu_gadai',
@@ -180,6 +184,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('nik'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -205,6 +210,7 @@ class Pembiayaan extends CI_Controller
             'required'      => '',
             'placeholder'   => '8xxxxxxxxxx',
             'value'         => $this->form_validation->set_value('phone'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['jml_pinjaman'] = [
             'name'          => 'jml_pinjaman',
@@ -221,6 +227,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('jangka_waktu_pinjam'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['jenis_barang_gadai'] = [
             'name'          => 'jenis_barang_gadai',
@@ -237,6 +244,7 @@ class Pembiayaan extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('berat_barang_gadai'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['waktu_gadai'] = [
             'name'          => 'waktu_gadai',

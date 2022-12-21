@@ -56,6 +56,7 @@ class Deposito extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('nik'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -81,6 +82,7 @@ class Deposito extends CI_Controller
             'required'      => '',
             'placeholder'   => '8xxxxxxxxxx',
             'value'         => $this->form_validation->set_value('phone'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['total_deposito'] = [
             'name'          => 'total_deposito',
@@ -132,6 +134,7 @@ class Deposito extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
             'value'         => $this->form_validation->set_value('nik'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -157,6 +160,7 @@ class Deposito extends CI_Controller
             'required'      => '',
             'placeholder'   => '8xxxxxxxxxx',
             'value'         => $this->form_validation->set_value('phone'),
+            'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
         ];
         $this->data['total_deposito'] = [
             'name'          => 'total_deposito',
@@ -189,7 +193,7 @@ class Deposito extends CI_Controller
     function create_action()
     {
         $this->form_validation->set_rules('name', 'Nama Deposan', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('address', 'Alamat', 'required');
         $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
         $this->form_validation->set_rules('phone', 'No. HP/Telephone', 'is_numeric|required');
@@ -237,7 +241,7 @@ class Deposito extends CI_Controller
 
             write_log();
 
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Success!</b></h6></div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
             redirect('admin/deposito');
         }
     }
@@ -272,24 +276,26 @@ class Deposito extends CI_Controller
             $jangka_waktu_deposito = $jatuh_tempo - $waktu_deposito;
 
             $data = array(
-                'name'            => $this->input->post('name'),
-                'nik'             => $this->input->post('nik'),
-                'address'         => $this->input->post('address'),
-                'email'           => $this->input->post('email'),
-                'phone'           => $this->input->post('phone'),
-                'total_deposito'  => (int) $total_deposito,
-                'jangka_waktu'    => $jangka_waktu_deposito,
-                'waktu_deposito'  => $this->input->post('waktu_deposito'),
-                'jatuh_tempo'     => $this->input->post('jatuh_tempo'),
-                'instansi_id'     => $this->session->instansi_id,
-                'modified_by'     => $this->session->username,
+                'name'              => $this->input->post('name'),
+                'nik'               => $this->input->post('nik'),
+                'address'           => $this->input->post('address'),
+                'email'             => $this->input->post('email'),
+                'phone'             => $this->input->post('phone'),
+                'total_deposito'    => (int) $total_deposito,
+                'resapan_deposito'  => 0,
+                'saldo_deposito'    => (int) $total_deposito,
+                'jangka_waktu'      => $jangka_waktu_deposito,
+                'waktu_deposito'    => $this->input->post('waktu_deposito'),
+                'jatuh_tempo'       => $this->input->post('jatuh_tempo'),
+                'instansi_id'       => $this->session->instansi_id,
+                'modified_by'       => $this->session->username,
             );
 
             $this->Deposito_model->update($this->input->post('id_deposito'), $data);
 
             write_log();
 
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Success!</b></h6></div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
             redirect('admin/deposito');
         }
     }

@@ -36,8 +36,8 @@
                         <div class="col-md-12">
                             <?php if ($this->session->flashdata('message')) {
                                 echo $this->session->flashdata('message');
-                            }
-                            ?>
+                            } ?>
+                            <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
                                 <?php echo form_open($action) ?>
