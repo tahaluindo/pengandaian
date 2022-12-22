@@ -318,12 +318,12 @@ class Pembiayaan extends CI_Controller
         } else {
             //SIMPAN DATA ANGGOTA PEMINJAM
             //Menentukan jangka waktu gadai
-            $waktu_gadai = date("Y-m-d", strtotime($this->input->post('waktu_gadai')));
-            $jatuh_tempo_gadai = date("Y-m-d", strtotime($this->input->post('jatuh_tempo_gadai')));
-            $tgl1 = new DateTime($waktu_gadai);
-            $tgl2 = new DateTime($jatuh_tempo_gadai);
-            $selisih = $tgl2->diff($tgl1);
-            $jangka_waktu_gadai = $selisih->m;
+            $waktu_gadai = strtotime($this->input->post('waktu_gadai'));
+            $jatuh_tempo_gadai = strtotime($this->input->post('jatuh_tempo_gadai'));
+            // Hitung semua bulan pada tahun sebelumnya
+            $jangka_waktu_gadai = (date("Y", $jatuh_tempo_gadai) - date("Y", $waktu_gadai)) * 12;
+            // menghitung selisih bulan
+            $jangka_waktu_gadai += date("m", $jatuh_tempo_gadai) - date("m", $waktu_gadai);
 
             //Menentukan sewa tempat perbulan
             $sewa_tempat_perbulan = 10000 * $this->input->post('berat_barang_gadai');
