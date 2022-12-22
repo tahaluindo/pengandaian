@@ -387,13 +387,23 @@ class Pembiayaan extends CI_Controller
         if (!empty($this->session->id_deposito)) {
             $count_deposito_id = count($this->session->id_deposito);
 
+            $pembiayaan = $this->Pembiayaan_model->get_by_id($this->input->post('id_pembiayaan'));
+
             for ($i = 0; $i < $count_deposito_id; $i++) {
+                $total_basil = $this->session->persentase_deposito[$i] * $pembiayaan->total_biaya_sewa / 100;
+
+                $basil_for_lembaga = 70 * $total_basil / 100;
+                $basil_for_deposan = 30 * $total_basil / 100;
+
                 $data[$i] = array(
-                    'pembiayaan_id'    => $this->input->post('id_pembiayaan'),
-                    'deposito_id'      => $this->session->id_deposito[$i],
-                    'persentase'       => $this->session->persentase_deposito[$i],
-                    'nominal'          => $this->session->nominal_deposito[$i],
-                    'created_by'       => $this->session->username,
+                    'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
+                    'deposito_id'       => $this->session->id_deposito[$i],
+                    'persentase'        => $this->session->persentase_deposito[$i],
+                    'nominal'           => $this->session->nominal_deposito[$i],
+                    'total_basil'       => $total_basil,
+                    'basil_for_lembaga' => $basil_for_lembaga,
+                    'basil_for_deposan' => $basil_for_deposan,
+                    'created_by'        => $this->session->username,
                 );
 
                 $this->db->insert('sumber_dana', $data[$i]);
