@@ -1,5 +1,5 @@
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 70%;" role="document">
+    <div class="modal-dialog" style="max-width: 80%;" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail <?php echo $page_title ?></h5>
@@ -90,12 +90,19 @@
                             <tr>
                                 <td>Sumber Dana</td>
                                 <td>:</td>
-                                <td><b><span class="sumber_dana"></span></b></td>
+                                <td><b><span class="sumber_dana"></span></b> <a href="#" id="showDaftar" class="badge badge-info">Lihat Daftar</a></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Content -->
+
+                <!-- SimpleTables -->
+                <div id="showDeposan"></div>
+                <!-- SimpleTables -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

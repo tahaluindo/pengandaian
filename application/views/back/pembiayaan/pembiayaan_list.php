@@ -77,7 +77,7 @@
                                                 // Action
                                                 $edit = '<a href="#" id="editPembiayaan" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . $data->jml_pinjaman . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . $data->waktu_gadai . '" data-jatuh_tempo_gadai="' . $data->jatuh_tempo_gadai . '" data-sistem_pembayaran_sewa="' . $data->sistem_pembayaran_sewa . '" data-sumber_dana="' . $data->sumber_dana . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/pembiayaan/delete/' . $data->id_pembiayaan) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" id="detailPembiayaan" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . number_format($data->jml_pinjaman, 2, ',', '.') . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . date_indonesian_only($data->waktu_gadai) . '" data-jatuh_tempo_gadai="' . date_indonesian_only($data->jatuh_tempo_gadai) . '" data-jangka_waktu_gadai="' . $data->jangka_waktu_gadai . '" data-sewa_tempat_perbulan="' . number_format($data->sewa_tempat_perbulan, 2, ',', '.') . '" data-total_biaya_sewa="' . number_format($data->total_biaya_sewa, 2, ',', '.') . '" data-sistem_pembayaran_sewa="' . $sistem_pembayaran_sewa . '" data-sumber_dana="' . $sumber_dana . '"><i class="fas fa-info-circle"></i></a>';
+                                                $detail = '<a href="#" id="detailPembiayaan" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . number_format($data->jml_pinjaman, 2, ',', '.') . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . date_indonesian_only($data->waktu_gadai) . '" data-jatuh_tempo_gadai="' . date_indonesian_only($data->jatuh_tempo_gadai) . '" data-jangka_waktu_gadai="' . $data->jangka_waktu_gadai . '" data-sewa_tempat_perbulan="' . number_format($data->sewa_tempat_perbulan, 2, ',', '.') . '" data-total_biaya_sewa="' . number_format($data->total_biaya_sewa, 2, ',', '.') . '" data-sistem_pembayaran_sewa="' . $sistem_pembayaran_sewa . '" data-sumber_dana="' . $sumber_dana . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
@@ -177,7 +177,10 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable(); // ID From dataTable
+            $('#dataTable').DataTable({
+                searching: false,
+                paging: false
+            }); // ID From dataTable
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
         });
 
@@ -214,6 +217,7 @@
             });
 
             $(document).on('click', '#detailPembiayaan', function() {
+                const id_pembiayaan = $(this).data('id_pembiayaan');
                 const name = $(this).data('name');
                 const nik = $(this).data('nik');
                 const address = $(this).data('address');
@@ -230,6 +234,7 @@
                 const total_biaya_sewa = $(this).data('total_biaya_sewa');
                 const sistem_pembayaran_sewa = $(this).data('sistem_pembayaran_sewa');
                 const sumber_dana = $(this).data('sumber_dana');
+                $('#showDaftar').val(id_pembiayaan);
                 $('.name').text(name);
                 $('.nik').text(nik);
                 $('.address').text(address);
@@ -246,7 +251,23 @@
                 $('.total_biaya_sewa').text(total_biaya_sewa);
                 $('.sistem_pembayaran_sewa').text(sistem_pembayaran_sewa);
                 $('.sumber_dana').text(sumber_dana);
-            })
+
+
+            });
+
+            $(document).on('click', '#showDaftar', function() {
+                const id_pembiayaan = $(this).val();
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/pembiayaan/get_deposan/') ?>" + id_pembiayaan,
+                    beforeSend: function(data) {
+                        $("#showDeposan").html('<center><h1><i class="fa fa-spin fa-spinner" /></h1></center>');
+                    },
+                    success: function(data) {
+                        $("#showDeposan").html(data);
+                    },
+                });
+            });
         });
     </script>
 </body>

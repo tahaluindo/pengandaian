@@ -694,4 +694,11 @@ class Pembiayaan extends CI_Controller
 
         echo json_encode($output);
     }
+
+    function get_deposan($id_pembiayaan)
+    {
+        $this->data['deposan'] = $this->Sumberdana_model->get_deposan_by_pembiayaan($id_pembiayaan);
+
+        $this->load->view('back/pembiayaan/v_deposan_by_pembiayaan_list', $this->data);
+    }
 }
