@@ -379,4 +379,14 @@ class Deposito extends CI_Controller
             redirect('admin/deposito');
         }
     }
+
+    function count_basil_berjalan_by_deposan($id_deposito)
+    {
+        $basil_berjalan = $this->Sumberdana_model->count_basil_berjalan_by_deposan($id_deposito);
+        $this->data['basil_berjalan'] = $basil_berjalan[0]->basil_for_deposan;
+
+        $this->data['data_deposito'] = $this->Deposito_model->get_by_id($id_deposito);
+
+        $this->load->view('back/deposito/v_basil_berjalan', $this->data);
+    }
 }

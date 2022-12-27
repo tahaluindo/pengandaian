@@ -20,4 +20,9 @@ class Sumberdana_model extends CI_Model
 
         return $this->db->get($this->table)->result();
     }
+
+    function count_basil_berjalan_by_deposan($id_deposito)
+    {
+        return $this->db->query('SELECT sum(basil_for_deposan) AS basil_for_deposan from sumber_dana where deposito_id = ' . $id_deposito)->result();
+    }
 }

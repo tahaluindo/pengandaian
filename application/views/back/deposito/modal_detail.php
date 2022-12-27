@@ -1,5 +1,5 @@
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 700px;" role="document">
+    <div class="modal-dialog" style="max-width: 80%;" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail <?php echo $page_title ?></h5>
@@ -43,16 +43,6 @@
                                 <td><b>Rp. <span class="total_deposito"></span></b></td>
                             </tr>
                             <tr>
-                                <td>Resapan Deposito</td>
-                                <td>:</td>
-                                <td><b>Rp. <span class="resapan_deposito"></span></b></td>
-                            </tr>
-                            <tr>
-                                <td>Saldo Deposito</td>
-                                <td>:</td>
-                                <td><b>Rp. <span class="saldo_deposito"></span></b></td>
-                            </tr>
-                            <tr>
                                 <td>Jangka Waktu</td>
                                 <td>:</td>
                                 <td><b><span class="jangka_waktu"></span> Tahun</b></td>
@@ -76,10 +66,13 @@
                     </table>
                 </div>
                 <!-- Content -->
+                <Br>
+                <h6 class="ml-2 font-weight-bold text-primary">SERAPAN DANA</h6>
+                <div id="showBasil"></div>
             </div>
-            <!-- <div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>

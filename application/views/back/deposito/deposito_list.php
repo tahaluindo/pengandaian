@@ -60,7 +60,7 @@
                                                 // Action
                                                 $edit = '<a href="#" id="editDeposito" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_deposito="' . $data->id_deposito . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . $data->total_deposito . '" data-waktu_deposito="' . $data->waktu_deposito . '" data-jatuh_tempo="' . $data->jatuh_tempo . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/deposito/delete/' . $data->id_deposito) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" id="detailDeposito" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . number_format($data->total_deposito, 2, ',', '.') . '" data-resapan_deposito="' . number_format($data->resapan_deposito, 2, ',', '.') . '" data-saldo_deposito="' . number_format($data->saldo_deposito, 2, ',', '.') . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . date_indonesian_only($data->waktu_deposito) . '" data-jatuh_tempo="' . date_indonesian_only($data->jatuh_tempo) . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-info-circle"></i></a>';
+                                                $detail = '<a href="#" id="detailDeposito" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-id_deposito="' . $data->id_deposito . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-total_deposito="' . number_format($data->total_deposito, 2, ',', '.') . '" data-resapan_deposito="' . number_format($data->resapan_deposito, 2, ',', '.') . '" data-saldo_deposito="' . number_format($data->saldo_deposito, 2, ',', '.') . '" data-jangka_waktu="' . $data->jangka_waktu . '" data-waktu_deposito="' . date_indonesian_only($data->waktu_deposito) . '" data-jatuh_tempo="' . date_indonesian_only($data->jatuh_tempo) . '" data-bagi_hasil="' . $data->bagi_hasil . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
                                                     <td><?php echo $data->name ?></td>
@@ -176,6 +176,7 @@
             });
 
             $(document).on('click', '#detailDeposito', function() {
+                const id_deposito = $(this).data('id_deposito');
                 const name = $(this).data('name');
                 const nik = $(this).data('nik');
                 const address = $(this).data('address');
@@ -200,7 +201,14 @@
                 $('.waktu_deposito').text(waktu_deposito);
                 $('.jatuh_tempo').text(jatuh_tempo);
                 $('.bagi_hasil').text(bagi_hasil);
-            })
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/deposito/count_basil_berjalan_by_deposan/') ?>" + id_deposito,
+                    success: function(data) {
+                        $("#showBasil").html(data);
+                    },
+                });
+            });
         });
     </script>
 </body>
