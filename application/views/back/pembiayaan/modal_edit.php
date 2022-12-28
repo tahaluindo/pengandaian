@@ -79,10 +79,6 @@
                     <label for="exampleFormControlSelect1">Sistem Pembayaran Sewa</label>
                     <?php echo form_dropdown('', $sistem_pembayaran_sewa_value, '', $sistem_pembayaran_sewa) ?>
                 </div>
-                <div class="form-group">
-                    <label for="exampleFormControlSelect1">Sumber Dana</label>
-                    <?php echo form_dropdown('', $sumber_dana_value, '', $sumber_dana) ?>
-                </div>
                 <!-- Content -->
             </div>
             <?php echo form_input($id_pembiayaan) ?>

@@ -25,4 +25,18 @@ class Sumberdana_model extends CI_Model
     {
         return $this->db->query('SELECT sum(basil_for_deposan) AS basil_for_deposan from sumber_dana where deposito_id = ' . $id_deposito)->result();
     }
+
+    function get_pengguna_dana_by_deposan($id_deposito)
+    {
+        $this->db->select('sumber_dana.id_sumber_dana, pembiayaan.name, sumber_dana.nominal, sumber_dana.total_basil, sumber_dana.basil_for_deposan');
+
+        $this->db->join('pembiayaan', 'sumber_dana.pembiayaan_id = pembiayaan.id_pembiayaan', 'left');
+
+        $this->db->where('deposito_id', $id_deposito);
+        $this->db->where('is_delete_sumber_dana', '0');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
 }

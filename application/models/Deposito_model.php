@@ -14,7 +14,7 @@ class Deposito_model extends CI_Model
 
         $this->db->where('is_delete_deposito', '0');
 
-        $this->db->order_by($this->id, $this->order);
+        $this->db->order_by($this->id, 'ASC');
 
         return $this->db->get($this->table)->result();
     }

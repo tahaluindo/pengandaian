@@ -120,7 +120,9 @@
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable(); // ID From dataTable
-            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+            $('#dataTableHover').DataTable({
+                ordering: false,
+            }); // ID From dataTable with Hover
 
             $('#nominal_sumber_dana_tabungan').maskMoney({
                 thousands: '.',

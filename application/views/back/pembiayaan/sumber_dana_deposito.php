@@ -4,7 +4,7 @@
             <tr>
                 <th>Nama Deposan</th>
                 <th>Deposito</th>
-                <th>Resapan</th>
+                <th>Serapan Dana</th>
                 <th>Saldo</th>
                 <th>Aksi</th>
             </tr>

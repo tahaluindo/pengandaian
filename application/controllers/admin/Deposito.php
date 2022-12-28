@@ -389,4 +389,11 @@ class Deposito extends CI_Controller
 
         $this->load->view('back/deposito/v_basil_berjalan', $this->data);
     }
+
+    function get_pengguna_dana_by_deposan($id_deposito)
+    {
+        $this->data['pengguna_dana'] = $this->Sumberdana_model->get_pengguna_dana_by_deposan($id_deposito);
+
+        $this->load->view('back/deposito/v_pengguna_dana_by_deposan_list', $this->data);
+    }
 }

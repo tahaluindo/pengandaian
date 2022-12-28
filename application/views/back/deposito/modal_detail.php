@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail <?php echo $page_title ?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="location.reload()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -57,21 +57,19 @@
                                 <td>:</td>
                                 <td><b><span class="jatuh_tempo"></span></b></td>
                             </tr>
-                            <tr>
-                                <td>Bagi Hasil</td>
-                                <td>:</td>
-                                <td><b>Rp. <span class="bagi_hasil"></span>,00</b></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Content -->
-                <Br>
+                <br>
                 <h6 class="ml-2 font-weight-bold text-primary">SERAPAN DANA</h6>
                 <div id="showBasil"></div>
+                <br>
+                <h6 class="ml-2 font-weight-bold text-primary display">PENGGUNA DANA</h6> <a href="#" id="showDaftar" class="badge badge-info">Lihat Daftar</a>
+                <div id="showPenggunaDana"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="location.reload()">Close</button>
             </div>
         </div>
     </div>
