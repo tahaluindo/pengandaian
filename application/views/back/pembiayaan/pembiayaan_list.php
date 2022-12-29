@@ -259,7 +259,7 @@
                 const id_pembiayaan = $(this).val();
 
                 jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/get_deposan/') ?>" + id_pembiayaan,
+                    url: "<?php echo base_url('admin/pembiayaan/get_sumber_dana/') ?>" + id_pembiayaan,
                     beforeSend: function(data) {
                         $("#showDeposan").html('<center><h1><i class="fa fa-spin fa-spinner" /></h1></center>');
                     },
