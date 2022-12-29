@@ -352,73 +352,120 @@ class Pembiayaan extends CI_Controller
 
             write_log();
 
-            $array_session = array(
-                'id_anggota'            => $id_anggota,
-                'nama_anggota'          => $this->input->post('name'),
-                'jml_pinjaman'          => $jml_pinjaman,
-                'total_pinjaman'        => $jml_pinjaman,
-                'id_deposito'           => array(),
-                'persentase_deposito'   => array(),
-                'nama_deposan'          => array(),
-                'nominal_deposito'      => array(),
-            );
+            if ($this->input->post('sumber_dana') == 1) {
+                $array_session = array(
+                    'id_anggota'            => $id_anggota,
+                    'nama_anggota'          => $this->input->post('name'),
+                    'jml_pinjaman'          => $jml_pinjaman,
+                );
 
-            $this->session->set_userdata($array_session);
+                $this->session->set_userdata($array_session);
 
-            redirect('admin/pembiayaan/sumber_dana_deposito');
+                redirect('admin/pembiayaan/sumber_dana_tabungan');
+            } elseif ($this->input->post('sumber_dana') == 2) {
+                $array_session = array(
+                    'id_anggota'            => $id_anggota,
+                    'nama_anggota'          => $this->input->post('name'),
+                    'jml_pinjaman'          => $jml_pinjaman,
+                    'total_pinjaman'        => $jml_pinjaman,
+                    'id_deposito'           => array(),
+                    'persentase_deposito'   => array(),
+                    'nama_deposan'          => array(),
+                    'nominal_deposito'      => array(),
+                );
+
+                $this->session->set_userdata($array_session);
+
+                redirect('admin/pembiayaan/sumber_dana_deposito');
+            }
         }
     }
 
     function create_action()
     {
-        if (!empty($this->session->id_deposito)) {
-            $count_deposito_id = count($this->session->id_deposito);
-
+        if ($this->input->post('sumber_dana') == 1) {
             $pembiayaan = $this->Pembiayaan_model->get_by_id($this->input->post('id_pembiayaan'));
 
-            for ($i = 0; $i < $count_deposito_id; $i++) {
-                $total_basil = $this->session->persentase_deposito[$i] * $pembiayaan->total_biaya_sewa / 100;
+            $data_sumber_dana = array(
+                'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
+                'deposito_id'       => NULL,
+                'persentase'        => 100,
+                'nominal'           => $this->session->jml_pinjaman,
+                'total_basil'       => $pembiayaan->total_biaya_sewa,
+                'basil_for_lembaga' => $pembiayaan->total_biaya_sewa,
+                'created_by'        => $this->session->username,
+            );
 
-                $basil_for_lembaga = 70 * $total_basil / 100;
-                $basil_for_deposan = 30 * $total_basil / 100;
+            $this->db->insert('sumber_dana', $data_sumber_dana);
 
-                $data[$i] = array(
-                    'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
-                    'deposito_id'       => $this->session->id_deposito[$i],
-                    'persentase'        => $this->session->persentase_deposito[$i],
-                    'nominal'           => $this->session->nominal_deposito[$i],
-                    'total_basil'       => $total_basil,
-                    'basil_for_lembaga' => $basil_for_lembaga,
-                    'basil_for_deposan' => $basil_for_deposan,
-                    'created_by'        => $this->session->username,
-                );
+            write_log();
 
-                $this->db->insert('sumber_dana', $data[$i]);
+            //MANIPULASI DATA INSTANSI
+            $instansi = $this->Instansi_model->get_by_id($this->session->instansi_id);
 
-                write_log();
+            $saldo_tabungan = $instansi->saldo_tabungan - $this->session->jml_pinjaman;
+            $resapan_tabungan = $instansi->resapan_tabungan + $this->session->jml_pinjaman;
 
-                //Manipulasi total deposito
-                $deposito = $this->Deposito_model->get_by_id($this->session->id_deposito[$i]);
-                $saldo_deposito = (int) $deposito->saldo_deposito - (int) $this->session->nominal_deposito[$i];
-                $resapan_deposito = $deposito->resapan_deposito + $this->session->nominal_deposito[$i];
+            $data = array(
+                'saldo_tabungan'    => $saldo_tabungan,
+                'resapan_tabungan'  => $resapan_tabungan,
+            );
 
-                $data_deposito = array(
-                    'saldo_deposito'    => $saldo_deposito,
-                    'resapan_deposito'  => $resapan_deposito,
-                );
+            $this->Instansi_model->update($this->session->instansi_id, $data);
 
-                $this->Deposito_model->update($this->session->id_deposito[$i], $data_deposito);
+            $this->session->unset_userdata('id_anggota');
+            $this->session->unset_userdata('nama_anggota');
+            $this->session->unset_userdata('jml_pinjaman');
+        } elseif ($this->input->post('sumber_dana') == 2) {
+            if (!empty($this->session->id_deposito)) {
+                $count_deposito_id = count($this->session->id_deposito);
+
+                $pembiayaan = $this->Pembiayaan_model->get_by_id($this->input->post('id_pembiayaan'));
+
+                for ($i = 0; $i < $count_deposito_id; $i++) {
+                    $total_basil = $this->session->persentase_deposito[$i] * $pembiayaan->total_biaya_sewa / 100;
+
+                    $basil_for_lembaga = 70 * $total_basil / 100;
+                    $basil_for_deposan = 30 * $total_basil / 100;
+
+                    $data[$i] = array(
+                        'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
+                        'deposito_id'       => $this->session->id_deposito[$i],
+                        'persentase'        => $this->session->persentase_deposito[$i],
+                        'nominal'           => $this->session->nominal_deposito[$i],
+                        'total_basil'       => $total_basil,
+                        'basil_for_lembaga' => $basil_for_lembaga,
+                        'basil_for_deposan' => $basil_for_deposan,
+                        'created_by'        => $this->session->username,
+                    );
+
+                    $this->db->insert('sumber_dana', $data[$i]);
+
+                    write_log();
+
+                    //Manipulasi total deposito
+                    $deposito = $this->Deposito_model->get_by_id($this->session->id_deposito[$i]);
+                    $saldo_deposito = (int) $deposito->saldo_deposito - (int) $this->session->nominal_deposito[$i];
+                    $resapan_deposito = $deposito->resapan_deposito + $this->session->nominal_deposito[$i];
+
+                    $data_deposito = array(
+                        'saldo_deposito'    => $saldo_deposito,
+                        'resapan_deposito'  => $resapan_deposito,
+                    );
+
+                    $this->Deposito_model->update($this->session->id_deposito[$i], $data_deposito);
+                }
             }
-        }
 
-        $this->session->unset_userdata('id_anggota');
-        $this->session->unset_userdata('nama_anggota');
-        $this->session->unset_userdata('jml_pinjaman');
-        $this->session->unset_userdata('total_pinjaman');
-        $this->session->unset_userdata('id_deposito');
-        $this->session->unset_userdata('persentase_deposito');
-        $this->session->unset_userdata('nama_deposan');
-        $this->session->unset_userdata('nominal_deposito');
+            $this->session->unset_userdata('id_anggota');
+            $this->session->unset_userdata('nama_anggota');
+            $this->session->unset_userdata('jml_pinjaman');
+            $this->session->unset_userdata('total_pinjaman');
+            $this->session->unset_userdata('id_deposito');
+            $this->session->unset_userdata('persentase_deposito');
+            $this->session->unset_userdata('nama_deposan');
+            $this->session->unset_userdata('nominal_deposito');
+        }
 
         $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
         redirect('admin/pembiayaan');
@@ -440,14 +487,6 @@ class Pembiayaan extends CI_Controller
 
             $this->data['get_all'] = $this->Deposito_model->get_all();
 
-            $this->data['nominal_sumber_dana_tabungan'] = [
-                'name'          => 'nominal_sumber_dana_tabungan',
-                'id'            => 'nominal_sumber_dana_tabungan',
-                'class'         => 'form-control',
-                'autocomplete'  => 'off',
-                'required'      => '',
-                'value'         => $this->form_validation->set_value('nominal_sumber_dana_tabungan'),
-            ];
             $this->data['persentase_deposito'] = [
                 'name'          => 'persentase_deposito',
                 'id'            => 'persentase_deposito',
@@ -472,9 +511,46 @@ class Pembiayaan extends CI_Controller
                 'id'            => 'id_pembiayaan',
                 'type'          => 'hidden',
             ];
+            $this->data['sumber_dana'] = [
+                'name'          => 'sumber_dana',
+                'id'            => 'sumber_dana',
+                'type'          => 'hidden',
+            ];
 
             $this->load->view('back/pembiayaan/pembiayaan_add_forward', $this->data);
         }
+    }
+
+    function sumber_dana_tabungan()
+    {
+        $this->data['action'] = 'admin/pembiayaan/create_action';
+
+        $this->data['page_title'] = 'Sumber Dana Dari Tabungan';
+
+        $this->data['status_sumber_dana'] = 1;
+
+        $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
+
+        $this->data['nominal_sumber_dana_tabungan'] = [
+            'name'          => 'nominal_sumber_dana_tabungan',
+            'id'            => 'nominal_sumber_dana_tabungan',
+            'class'         => 'form-control',
+            'autocomplete'  => 'off',
+            'required'      => '',
+            'value'         => $this->form_validation->set_value('nominal_sumber_dana_tabungan'),
+        ];
+        $this->data['id_pembiayaan'] = [
+            'name'          => 'id_pembiayaan',
+            'id'            => 'id_pembiayaan',
+            'type'          => 'hidden',
+        ];
+        $this->data['sumber_dana'] = [
+            'name'          => 'sumber_dana',
+            'id'            => 'sumber_dana',
+            'type'          => 'hidden',
+        ];
+
+        $this->load->view('back/pembiayaan/pembiayaan_add_forward', $this->data);
     }
 
     function persentase_action()

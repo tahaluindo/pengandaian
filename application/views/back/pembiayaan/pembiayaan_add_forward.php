@@ -42,31 +42,40 @@
                             } ?>
                             <!-- Content -->
                             <div class="card mb-4">
-                                <div class="alert alert-info" role="alert">
-                                    Nama Anggota : <b><?php echo $this->session->nama_anggota ?></b><br>
-                                    Jumlah Pinjaman Anggota : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?></b><br>
-                                    Sisa Pembagian Deposito : <b>Rp <?php echo number_format($this->session->total_pinjaman, 0, ',', '.') ?></b><br>
-                                    Deposan Terpilih : <b>
-                                        <?php
-                                        if (!empty($this->session->id_deposito)) {
-                                            for ($i = 0; $i < count($this->session->id_deposito); $i++) {
-                                                echo $this->session->nama_deposan[$i] . ' (' . $this->session->persentase_deposito[$i] . '%). ';
+                                <?php if ($status_sumber_dana == 1) { ?>
+                                    <div class="alert alert-info" role="alert">
+                                        Nama Anggota : <b><?php echo $this->session->nama_anggota ?></b><br>
+                                        Jumlah Pinjaman Anggota : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?></b><br>
+                                        <hr>
+                                        Saldo Tabungan Saat Ini : <b>Rp <?php echo number_format($instansi->saldo_tabungan, 0, ',', '.') ?></b><br>
+                                        Dana Yang Digunakan : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?> (100% dari jumlah pinjaman)</b>
+                                    </div>
+                                <?php } elseif ($status_sumber_dana == 2) { ?>
+                                    <div class="alert alert-info" role="alert">
+                                        Nama Anggota : <b><?php echo $this->session->nama_anggota ?></b><br>
+                                        Jumlah Pinjaman Anggota : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?></b><br>
+                                        Sisa Pembagian Deposito : <b>Rp <?php echo number_format($this->session->total_pinjaman, 0, ',', '.') ?></b><br>
+                                        Deposan Terpilih : <b>
+                                            <?php
+                                            if (!empty($this->session->id_deposito)) {
+                                                for ($i = 0; $i < count($this->session->id_deposito); $i++) {
+                                                    echo $this->session->nama_deposan[$i] . ' (' . $this->session->persentase_deposito[$i] . '%). ';
+                                                }
+                                            } else {
+                                                echo '-';
                                             }
-                                        } else {
-                                            echo '-';
-                                        }
-                                        ?>
-                                    </b>
-                                </div>
+                                            ?>
+                                        </b>
+                                    </div>
+                                <?php } ?>
 
                                 <?php echo form_open($action) ?>
-                                <?php if ($status_sumber_dana == 1) { ?>
-                                    <?php $this->load->view('back/pembiayaan/sumber_dana_tabungan'); ?>
-                                <?php } elseif ($status_sumber_dana == 2) { ?>
+                                <?php if ($status_sumber_dana == 2) { ?>
                                     <?php $this->load->view('back/pembiayaan/sumber_dana_deposito'); ?>
                                 <?php } ?>
                                 <hr>
                                 <?php echo form_input($id_pembiayaan, $this->session->id_anggota) ?>
+                                <?php echo form_input($sumber_dana, $status_sumber_dana) ?>
                                 <div class="card-footer">
                                     <button type="reset" class="btn btn-warning"><?php echo $btn_reset ?></button>
                                     <button type="submit" class="btn btn-primary"><?php echo $btn_submit ?></button>
@@ -154,7 +163,6 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
 
-        // function tampilNominal() {
         $('#persentase_deposito').on('keyup', function() {
             persentase_deposito = document.getElementById("persentase_deposito").value;
 
@@ -167,7 +175,6 @@
                 }
             });
         });
-        // }
     </script>
 </body>
 
