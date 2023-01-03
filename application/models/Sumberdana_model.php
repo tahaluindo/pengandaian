@@ -14,6 +14,7 @@ class Sumberdana_model extends CI_Model
         $this->db->join('deposito', 'sumber_dana.deposito_id = deposito.id_deposito', 'left');
 
         $this->db->where('pembiayaan_id', $id_pembiayaan);
+        $this->db->where('deposito_id !=', NULL);
         $this->db->where('is_delete_sumber_dana', '0');
 
         $this->db->order_by($this->id, $this->order);
@@ -23,9 +24,10 @@ class Sumberdana_model extends CI_Model
 
     function get_tabungan_by_pembiayaan($id_pembiayaan)
     {
-        $this->db->select('sumber_dana.nominal, sumber_dana.total_basil');
+        $this->db->select('sumber_dana.nominal, sumber_dana.total_basil, sumber_dana.persentase');
 
         $this->db->where('pembiayaan_id', $id_pembiayaan);
+        $this->db->where('deposito_id', NULL);
         $this->db->where('is_delete_sumber_dana', '0');
 
         $this->db->order_by($this->id, $this->order);

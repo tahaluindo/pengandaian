@@ -940,6 +940,12 @@ class Pembiayaan extends CI_Controller
             $this->data['deposan'] = $this->Sumberdana_model->get_deposan_by_pembiayaan($id_pembiayaan);
 
             $this->load->view('back/pembiayaan/v_deposan_by_pembiayaan_list', $this->data);
+        } elseif ($pembiayaan->sumber_dana == 3) {
+            $this->data['deposan'] = $this->Sumberdana_model->get_deposan_by_pembiayaan($id_pembiayaan);
+
+            $this->data['tabungan'] = $this->Sumberdana_model->get_tabungan_by_pembiayaan($id_pembiayaan);
+
+            $this->load->view('back/pembiayaan/v_tabungan_deposan_by_pembiayaan_list', $this->data);
         }
     }
 }
