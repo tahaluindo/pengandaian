@@ -40,7 +40,7 @@
                             <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
-                                <?php echo form_open($action) ?>
+                                <?php echo form_open_multipart($action) ?>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -122,7 +122,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="dateRangePicker">Jangka Waktu Gadai</label>
                                                 <div class="input-daterange input-group">
@@ -137,17 +137,35 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="exampleFormControlSelect1">Sistem Pembayaran Sewa</label>
                                                 <?php echo form_dropdown('', $sistem_pembayaran_sewa_value, '', $sistem_pembayaran_sewa) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="exampleFormControlSelect1">Sumber Dana</label>
                                                 <?php echo form_dropdown('', $sumber_dana_value, '', $sumber_dana) ?>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="dateRangePicker">Foto Barang Yang Digadaikan</label>
+                                                <div class="custom-file">
+                                                    <input type="file" name="photo" onchange="photoPreview(this,'preview')" class="custom-file-input" id="customFile" required>
+                                                    <label class="custom-file-label" for="customFile">Upload Foto Disini</label>
+                                                </div>
+                                                <small class="form-text text-muted">Maximum file size 2Mb</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Preview Image</label><br>
+                                            <img id="preview" width="100%"/>
                                         </div>
                                     </div>
                                 </div>
@@ -227,6 +245,32 @@
                 todayBtn: 'linked',
             });
         });
+
+        function photoPreview(customFile,idpreview) {
+            var gb = customFile.files;
+            for (var i = 0; i < gb.length; i++) {
+                var gbPreview = gb[i];
+                var imageType = /image.*/;
+                var preview=document.getElementById(idpreview);
+                var reader = new FileReader();
+                if (gbPreview.type.match(imageType)) {
+                    //jika tipe data sesuai
+                    preview.file = gbPreview;
+                    reader.onload = (function(element)
+                    {
+                    return function(e)
+                    {
+                        element.src = e.target.result;
+                    };
+                    })(preview);
+                    //membaca data URL gambar
+                    reader.readAsDataURL(gbPreview);
+                } else {
+                    //jika tipe data tidak sesuai
+                    alert("Tipe file tidak sesuai. Gambar harus bertipe .png, .gif atau .jpg.");
+                }
+            }
+        }
     </script>
 </body>
 

@@ -7,7 +7,7 @@ class Pembiayaan extends CI_Controller
     {
         parent::__construct();
 
-        $this->data['module'] = 'Pembiayaan';
+        $this->data['module'] = 'Pinjaman';
 
         $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
 
@@ -303,98 +303,119 @@ class Pembiayaan extends CI_Controller
         if ($this->form_validation->run() === FALSE) {
             $this->create();
         } else {
-            //SIMPAN DATA ANGGOTA PEMINJAM
-            //Menentukan jangka waktu gadai
-            $waktu_gadai = strtotime($this->input->post('waktu_gadai'));
-            $jatuh_tempo_gadai = strtotime($this->input->post('jatuh_tempo_gadai'));
-            // Hitung semua bulan pada tahun sebelumnya
-            $jangka_waktu_gadai = (date("Y", $jatuh_tempo_gadai) - date("Y", $waktu_gadai)) * 12;
-            // menghitung selisih bulan
-            $jangka_waktu_gadai += date("m", $jatuh_tempo_gadai) - date("m", $waktu_gadai);
+            if ($_FILES['photo']['error'] <> 4) {
+                $nmfile = strtolower(url_title($this->input->post('name'))) . date('YmdHis');
 
-            //Menentukan sewa tempat perbulan
-            $sewa_tempat_perbulan = 10000 * $this->input->post('berat_barang_gadai');
+                $config['upload_path']      = './assets/images/barang_gadai/';
+                $config['allowed_types']    = 'jpg|jpeg|png';
+                $config['max_size']         = 2048; // 2Mb
+                $config['file_name']        = $nmfile;
 
-            //Menentukan total biaya sewa
-            $total_biaya_sewa = $sewa_tempat_perbulan * $jangka_waktu_gadai;
+                $this->load->library('upload', $config);
 
-            //Ubah tipe data jml pinjaman
-            $string = $this->input->post('jml_pinjaman');
-            $jml_pinjaman = preg_replace("/[^0-9]/", "", $string);
+                if (!$this->upload->do_upload('photo')) {
+                    $error = array('error' => $this->upload->display_errors());
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
 
-            //Format no telephone
-            $phone = '62' . $this->input->post('phone');
+                    $this->create();
+                } else {
+                    $photo = $this->upload->data();
 
-            $data = array(
-                'name'                      => $this->input->post('name'),
-                'nik'                       => $this->input->post('nik'),
-                'address'                   => $this->input->post('address'),
-                'email'                     => $this->input->post('email'),
-                'phone'                     => $phone,
-                'instansi_id'               => $this->session->instansi_id,
-                'jml_pinjaman'              => (int) $jml_pinjaman,
-                'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
-                'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
-                'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
-                'waktu_gadai'               => $this->input->post('waktu_gadai'),
-                'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
-                'jangka_waktu_gadai'        => $jangka_waktu_gadai,
-                'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
-                'total_biaya_sewa'          => $total_biaya_sewa,
-                'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
-                'sumber_dana'               => $this->input->post('sumber_dana'),
-                'created_by'                => $this->session->username,
-            );
+                    //SIMPAN DATA ANGGOTA PEMINJAM
+                    //Menentukan jangka waktu gadai
+                    $waktu_gadai = strtotime($this->input->post('waktu_gadai'));
+                    $jatuh_tempo_gadai = strtotime($this->input->post('jatuh_tempo_gadai'));
+                    // Hitung semua bulan pada tahun sebelumnya
+                    $jangka_waktu_gadai = (date("Y", $jatuh_tempo_gadai) - date("Y", $waktu_gadai)) * 12;
+                    // menghitung selisih bulan
+                    $jangka_waktu_gadai += date("m", $jatuh_tempo_gadai) - date("m", $waktu_gadai);
 
-            $this->Pembiayaan_model->insert($data);
+                    //Menentukan sewa tempat perbulan
+                    $sewa_tempat_perbulan = 10000 * $this->input->post('berat_barang_gadai');
 
-            $id_anggota = $this->db->insert_id();
+                    //Menentukan total biaya sewa
+                    $total_biaya_sewa = $sewa_tempat_perbulan * $jangka_waktu_gadai;
 
-            write_log();
+                    //Ubah tipe data jml pinjaman
+                    $string = $this->input->post('jml_pinjaman');
+                    $jml_pinjaman = preg_replace("/[^0-9]/", "", $string);
 
-            if ($this->input->post('sumber_dana') == 1) {
-                $array_session = array(
-                    'id_anggota'            => $id_anggota,
-                    'nama_anggota'          => $this->input->post('name'),
-                    'jml_pinjaman'          => $jml_pinjaman,
-                );
+                    //Format no telephone
+                    $phone = '62' . $this->input->post('phone');
 
-                $this->session->set_userdata($array_session);
+                    $data = array(
+                        'name'                      => $this->input->post('name'),
+                        'nik'                       => $this->input->post('nik'),
+                        'address'                   => $this->input->post('address'),
+                        'email'                     => $this->input->post('email'),
+                        'phone'                     => $phone,
+                        'instansi_id'               => $this->session->instansi_id,
+                        'jml_pinjaman'              => (int) $jml_pinjaman,
+                        'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
+                        'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
+                        'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
+                        'waktu_gadai'               => $this->input->post('waktu_gadai'),
+                        'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
+                        'jangka_waktu_gadai'        => $jangka_waktu_gadai,
+                        'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
+                        'total_biaya_sewa'          => $total_biaya_sewa,
+                        'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
+                        'sumber_dana'               => $this->input->post('sumber_dana'),
+                        'image'                     => $this->upload->data('file_name'),
+                        'created_by'                => $this->session->username,
+                    );
 
-                redirect('admin/pembiayaan/sumber_dana_tabungan');
-            } elseif ($this->input->post('sumber_dana') == 2) {
-                $array_session = array(
-                    'id_anggota'            => $id_anggota,
-                    'nama_anggota'          => $this->input->post('name'),
-                    'jml_pinjaman'          => $jml_pinjaman,
-                    'total_pinjaman'        => $jml_pinjaman,
-                    'status_sumber_dana'    => $this->input->post('sumber_dana'),
-                    'id_deposito'           => array(),
-                    'persentase_deposito'   => array(),
-                    'nama_deposan'          => array(),
-                    'nominal_deposito'      => array(),
-                );
+                    $this->Pembiayaan_model->insert($data);
 
-                $this->session->set_userdata($array_session);
+                    $id_anggota = $this->db->insert_id();
 
-                redirect('admin/pembiayaan/sumber_dana_deposito');
-            } elseif ($this->input->post('sumber_dana') == 3) {
-                $array_session = array(
-                    'id_anggota'            => $id_anggota,
-                    'nama_anggota'          => $this->input->post('name'),
-                    'jml_pinjaman'          => $jml_pinjaman,
-                    'total_pinjaman'        => $jml_pinjaman,
-                    'status_sumber_dana'    => $this->input->post('sumber_dana'),
-                    'persentase_tabungan'   => 100,
-                    'id_deposito'           => array(),
-                    'persentase_deposito'   => array(),
-                    'nama_deposan'          => array(),
-                    'nominal_deposito'      => array(),
-                );
+                    write_log();
 
-                $this->session->set_userdata($array_session);
+                    if ($this->input->post('sumber_dana') == 1) {
+                        $array_session = array(
+                            'id_anggota'            => $id_anggota,
+                            'nama_anggota'          => $this->input->post('name'),
+                            'jml_pinjaman'          => $jml_pinjaman,
+                        );
 
-                redirect('admin/pembiayaan/sumber_dana_tabungan_deposito');
+                        $this->session->set_userdata($array_session);
+
+                        redirect('admin/pembiayaan/sumber_dana_tabungan');
+                    } elseif ($this->input->post('sumber_dana') == 2) {
+                        $array_session = array(
+                            'id_anggota'            => $id_anggota,
+                            'nama_anggota'          => $this->input->post('name'),
+                            'jml_pinjaman'          => $jml_pinjaman,
+                            'total_pinjaman'        => $jml_pinjaman,
+                            'status_sumber_dana'    => $this->input->post('sumber_dana'),
+                            'id_deposito'           => array(),
+                            'persentase_deposito'   => array(),
+                            'nama_deposan'          => array(),
+                            'nominal_deposito'      => array(),
+                        );
+
+                        $this->session->set_userdata($array_session);
+
+                        redirect('admin/pembiayaan/sumber_dana_deposito');
+                    } elseif ($this->input->post('sumber_dana') == 3) {
+                        $array_session = array(
+                            'id_anggota'            => $id_anggota,
+                            'nama_anggota'          => $this->input->post('name'),
+                            'jml_pinjaman'          => $jml_pinjaman,
+                            'total_pinjaman'        => $jml_pinjaman,
+                            'status_sumber_dana'    => $this->input->post('sumber_dana'),
+                            'persentase_tabungan'   => 100,
+                            'id_deposito'           => array(),
+                            'persentase_deposito'   => array(),
+                            'nama_deposan'          => array(),
+                            'nominal_deposito'      => array(),
+                        );
+
+                        $this->session->set_userdata($array_session);
+
+                        redirect('admin/pembiayaan/sumber_dana_tabungan_deposito');
+                    }
+                }
             }
         }
     }
@@ -763,7 +784,6 @@ class Pembiayaan extends CI_Controller
 
             redirect('admin/pembiayaan/sumber_dana_tabungan_deposito');
         }
-
     }
 
     function update_action()
