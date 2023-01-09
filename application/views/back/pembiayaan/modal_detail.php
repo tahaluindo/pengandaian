@@ -92,14 +92,24 @@
                                 <td>:</td>
                                 <td><b><span class="sumber_dana"></span></b> <a href="#" id="showDaftar" class="badge badge-info">Lihat Daftar</a></td>
                             </tr>
+                            <tr>
+                                <td>Barang Yang Digadaikan</td>
+                                <td>:</td>
+                                <td><a href="#" id="showImage" class="badge badge-info">Lihat Foto</a></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <!-- Content -->
 
                 <!-- SimpleTables -->
+                <div id="showBarangGadai"></div>
+                <!-- SimpleTables -->
+
+                <!-- SimpleTables -->
                 <div id="showDeposan"></div>
                 <!-- SimpleTables -->
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="location.reload()">Close</button>

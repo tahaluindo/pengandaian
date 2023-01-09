@@ -968,4 +968,11 @@ class Pembiayaan extends CI_Controller
             $this->load->view('back/pembiayaan/v_tabungan_deposan_by_pembiayaan_list', $this->data);
         }
     }
+
+    function get_image($image)
+    {
+        $this->data['image_barang_gadai'] = $image;
+
+        $this->load->view('back/pembiayaan/v_image_by_pembiayaan', $this->data);
+    }
 }
