@@ -3,11 +3,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit <?php echo $page_title ?></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="location.reload()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <?php echo form_open($action) ?>
+            <?php echo form_open_multipart($action) ?>
             <div class="modal-body">
                 <!-- Content -->
                 <div class="form-group">
@@ -79,11 +79,27 @@
                     <label for="exampleFormControlSelect1">Sistem Pembayaran Sewa</label>
                     <?php echo form_dropdown('', $sistem_pembayaran_sewa_value, '', $sistem_pembayaran_sewa) ?>
                 </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="dateRangePicker">Foto Barang Yang Digadaikan</label>
+                            <div id="currentImage"></div>
+                            <img id="preview" width="100%" />
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" name="photo" onchange="photoPreview(this,'preview')" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Ubah Foto</label>
+                            </div>
+                            <small class="form-text text-muted">Maximum file size 2Mb</small>
+                        </div>
+                    </div>
+                </div>
                 <!-- Content -->
             </div>
             <?php echo form_input($id_pembiayaan) ?>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="location.reload()">Close</button>
                 <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
             <?php echo form_close() ?>

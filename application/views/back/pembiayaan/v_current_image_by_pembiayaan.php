@@ -1,0 +1,1 @@
+<img src="<?php echo base_url('assets/images/barang_gadai/' . $current_image) ?>" width="100%">

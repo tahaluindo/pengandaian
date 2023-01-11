@@ -828,25 +828,76 @@ class Pembiayaan extends CI_Controller
             $string = $this->input->post('jml_pinjaman');
             $jml_pinjaman = preg_replace("/[^0-9]/", "", $string);
 
-            $data = array(
-                'name'                      => $this->input->post('name'),
-                'nik'                       => $this->input->post('nik'),
-                'address'                   => $this->input->post('address'),
-                'email'                     => $this->input->post('email'),
-                'phone'                     => $this->input->post('phone'),
-                'instansi_id'               => $this->session->instansi_id,
-                'jml_pinjaman'              => (int) $jml_pinjaman,
-                'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
-                'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
-                'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
-                'waktu_gadai'               => $this->input->post('waktu_gadai'),
-                'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
-                'jangka_waktu_gadai'        => $jangka_waktu_gadai,
-                'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
-                'total_biaya_sewa'          => $total_biaya_sewa,
-                'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
-                'modified_by'               => $this->session->username,
-            );
+            if ($_FILES['photo']['error'] <> 4) {
+                $nmfile = strtolower(url_title($this->input->post('name'))) . date('YmdHis');
+
+                $config['upload_path']      = './assets/images/barang_gadai/';
+                $config['allowed_types']    = 'jpg|jpeg|png';
+                $config['max_size']         = 2048; // 2Mb
+                $config['file_name']        = $nmfile;
+
+                $this->load->library('upload', $config);
+
+                //Hapus file di direktori images
+                $delete = $this->Pembiayaan_model->get_by_id($this->input->post('id_pembiayaan'));
+
+                $dir        = "./assets/images/barang_gadai/" . $delete->image;
+
+                if (is_file($dir)) {
+                    unlink($dir);
+                }
+
+                if (!$this->upload->do_upload('photo')) {
+                    $error = array('error' => $this->upload->display_errors());
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
+
+                    $this->index();
+                } else {
+                    $photo = $this->upload->data();
+
+                    $data = array(
+                        'name'                      => $this->input->post('name'),
+                        'nik'                       => $this->input->post('nik'),
+                        'address'                   => $this->input->post('address'),
+                        'email'                     => $this->input->post('email'),
+                        'phone'                     => $this->input->post('phone'),
+                        'instansi_id'               => $this->session->instansi_id,
+                        'jml_pinjaman'              => (int) $jml_pinjaman,
+                        'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
+                        'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
+                        'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
+                        'waktu_gadai'               => $this->input->post('waktu_gadai'),
+                        'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
+                        'jangka_waktu_gadai'        => $jangka_waktu_gadai,
+                        'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
+                        'total_biaya_sewa'          => $total_biaya_sewa,
+                        'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
+                        'image'                     => $this->upload->data('file_name'),
+                        'modified_by'               => $this->session->username,
+                    );
+                }
+
+            } else {
+                $data = array(
+                    'name'                      => $this->input->post('name'),
+                    'nik'                       => $this->input->post('nik'),
+                    'address'                   => $this->input->post('address'),
+                    'email'                     => $this->input->post('email'),
+                    'phone'                     => $this->input->post('phone'),
+                    'instansi_id'               => $this->session->instansi_id,
+                    'jml_pinjaman'              => (int) $jml_pinjaman,
+                    'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
+                    'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
+                    'berat_barang_gadai'        => $this->input->post('berat_barang_gadai'),
+                    'waktu_gadai'               => $this->input->post('waktu_gadai'),
+                    'jatuh_tempo_gadai'         => $this->input->post('jatuh_tempo_gadai'),
+                    'jangka_waktu_gadai'        => $jangka_waktu_gadai,
+                    'sewa_tempat_perbulan'      => $sewa_tempat_perbulan,
+                    'total_biaya_sewa'          => $total_biaya_sewa,
+                    'sistem_pembayaran_sewa'    => $this->input->post('sistem_pembayaran_sewa'),
+                    'modified_by'               => $this->session->username,
+                );
+            }
 
             $this->Pembiayaan_model->update($this->input->post('id_pembiayaan'), $data);
 
@@ -925,6 +976,13 @@ class Pembiayaan extends CI_Controller
         $delete = $this->Pembiayaan_model->get_by_id($id);
 
         if ($delete) {
+            //Hapus file di direktori images
+            $dir        = "./assets/images/barang_gadai/" . $delete->image;
+
+            if (is_file($dir)) {
+                unlink($dir);
+            }
+
             $this->Pembiayaan_model->delete($id);
 
             write_log();
@@ -974,5 +1032,12 @@ class Pembiayaan extends CI_Controller
         $this->data['image_barang_gadai'] = $image;
 
         $this->load->view('back/pembiayaan/v_image_by_pembiayaan', $this->data);
+    }
+
+    function current_image_for_edit_pembiayaan($image)
+    {
+        $this->data['current_image'] = $image;
+
+        $this->load->view('back/pembiayaan/v_current_image_by_pembiayaan', $this->data);
     }
 }

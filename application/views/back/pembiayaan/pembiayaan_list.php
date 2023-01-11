@@ -75,7 +75,7 @@
                                                 }
 
                                                 // Action
-                                                $edit = '<a href="#" id="editPembiayaan" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . $data->jml_pinjaman . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . $data->waktu_gadai . '" data-jatuh_tempo_gadai="' . $data->jatuh_tempo_gadai . '" data-sistem_pembayaran_sewa="' . $data->sistem_pembayaran_sewa . '" data-sumber_dana="' . $data->sumber_dana . '"><i class="fas fa-pen"></i></a>';
+                                                $edit = '<a href="#" id="editPembiayaan" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . $data->jml_pinjaman . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . $data->waktu_gadai . '" data-jatuh_tempo_gadai="' . $data->jatuh_tempo_gadai . '" data-sistem_pembayaran_sewa="' . $data->sistem_pembayaran_sewa . '" data-sumber_dana="' . $data->sumber_dana . '" data-image="' . $data->image . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/pembiayaan/delete/' . $data->id_pembiayaan) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
                                                 $detail = '<a href="#" id="detailPembiayaan" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . number_format($data->jml_pinjaman, 0, ',', '.') . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . date_indonesian_only($data->waktu_gadai) . '" data-jatuh_tempo_gadai="' . date_indonesian_only($data->jatuh_tempo_gadai) . '" data-jangka_waktu_gadai="' . $data->jangka_waktu_gadai . '" data-sewa_tempat_perbulan="' . number_format($data->sewa_tempat_perbulan, 0, ',', '.') . '" data-total_biaya_sewa="' . number_format($data->total_biaya_sewa, 0, ',', '.') . '" data-sistem_pembayaran_sewa="' . $sistem_pembayaran_sewa . '" data-sumber_dana="' . $sumber_dana . '" data-image="' . $data->image . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
@@ -200,6 +200,7 @@
                 const jatuh_tempo_gadai = $(this).data('jatuh_tempo_gadai');
                 const sistem_pembayaran_sewa = $(this).data('sistem_pembayaran_sewa');
                 const sumber_dana = $(this).data('sumber_dana');
+                const image = $(this).data('image');
                 $('#id_pembiayaan').val(id_pembiayaan);
                 $('#name').val(name);
                 $('#nik').val(nik);
@@ -214,6 +215,13 @@
                 $('#jatuh_tempo_gadai').val(jatuh_tempo_gadai);
                 $('#sistem_pembayaran_sewa').val(sistem_pembayaran_sewa);
                 $('#sumber_dana').val(sumber_dana);
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/pembiayaan/current_image_for_edit_pembiayaan/') ?>" + image,
+                    success: function(data) {
+                        $("#currentImage").html(data);
+                    },
+                });
             });
 
             $(document).on('click', '#detailPembiayaan', function() {
@@ -285,6 +293,31 @@
                 });
             });
         });
+
+        function photoPreview(customFile,idpreview) {
+            var gb = customFile.files;
+            for (var i = 0; i < gb.length; i++) {
+                var gbPreview = gb[i];
+                var imageType = /image.*/;
+                var preview=document.getElementById(idpreview);
+                var reader = new FileReader();
+                if (gbPreview.type.match(imageType)) {
+                    //jika tipe data sesuai
+                    preview.file = gbPreview;
+                    reader.onload = (function(element) {
+                        return function(e) {
+                            element.src = e.target.result;
+                        };
+                    })(preview);
+                    //membaca data URL gambar
+                    reader.readAsDataURL(gbPreview);
+                    $("#currentImage").hide();
+                } else {
+                    //jika tipe data tidak sesuai
+                    alert("Tipe file tidak sesuai. Gambar harus bertipe .png, .gif atau .jpg.");
+                }
+            }
+        }
     </script>
 </body>
 

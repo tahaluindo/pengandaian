@@ -153,19 +153,18 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="dateRangePicker">Foto Barang Yang Digadaikan</label>
+                                                <img id="preview" width="100%"/>
+                                            </div>
+                                            <div class="form-group">
                                                 <div class="custom-file">
                                                     <input type="file" name="photo" onchange="photoPreview(this,'preview')" class="custom-file-input" id="customFile" required>
                                                     <label class="custom-file-label" for="customFile">Upload Foto Disini</label>
                                                 </div>
                                                 <small class="form-text text-muted">Maximum file size 2Mb</small>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Preview Image</label><br>
-                                            <img id="preview" width="100%"/>
                                         </div>
                                     </div>
                                 </div>
@@ -256,12 +255,10 @@
                 if (gbPreview.type.match(imageType)) {
                     //jika tipe data sesuai
                     preview.file = gbPreview;
-                    reader.onload = (function(element)
-                    {
-                    return function(e)
-                    {
-                        element.src = e.target.result;
-                    };
+                    reader.onload = (function(element) {
+                        return function(e) {
+                            element.src = e.target.result;
+                        };
                     })(preview);
                     //membaca data URL gambar
                     reader.readAsDataURL(gbPreview);
