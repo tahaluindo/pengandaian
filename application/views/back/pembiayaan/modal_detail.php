@@ -13,6 +13,11 @@
                     <table class="table align-items-center table-flush">
                         <tbody>
                             <tr>
+                                <td width="240px">No Anggota</td>
+                                <td width="5px">:</td>
+                                <td><b><span class="no_pinjaman"></span></b></td>
+                            </tr>
+                            <tr>
                                 <td width="240px">Nama Anggota</td>
                                 <td width="5px">:</td>
                                 <td><b><span class="name"></span></b></td>

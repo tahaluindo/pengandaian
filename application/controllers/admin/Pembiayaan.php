@@ -322,6 +322,13 @@ class Pembiayaan extends CI_Controller
                     $photo = $this->upload->data();
 
                     //SIMPAN DATA ANGGOTA PEMINJAM
+                    //Generate kode/no pinjaman
+                    $kode_huruf = 'A';
+                    $get_no_urut = $this->db->query('SELECT max(no_pinjaman) as kodeTerbesar FROM pembiayaan')->result();
+                    $urutan = (int) substr($get_no_urut[0]->kodeTerbesar, 1, 5);
+                    $urutan++;
+                    $no_pinjaman = $kode_huruf . sprintf("%05s", $urutan);
+
                     //Menentukan jangka waktu gadai
                     $waktu_gadai = strtotime($this->input->post('waktu_gadai'));
                     $jatuh_tempo_gadai = strtotime($this->input->post('jatuh_tempo_gadai'));
@@ -344,6 +351,7 @@ class Pembiayaan extends CI_Controller
                     $phone = '62' . $this->input->post('phone');
 
                     $data = array(
+                        'no_pinjaman'               => $no_pinjaman,
                         'name'                      => $this->input->post('name'),
                         'nik'                       => $this->input->post('nik'),
                         'address'                   => $this->input->post('address'),

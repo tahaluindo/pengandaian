@@ -10,7 +10,7 @@ class Pembiayaan_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('pembiayaan.id_pembiayaan, pembiayaan.name, pembiayaan.nik, pembiayaan.address, pembiayaan.email, pembiayaan.phone, pembiayaan.jml_pinjaman, pembiayaan.jangka_waktu_pinjam, pembiayaan.jenis_barang_gadai, pembiayaan.berat_barang_gadai, pembiayaan.waktu_gadai, pembiayaan.jatuh_tempo_gadai, pembiayaan.jangka_waktu_gadai, pembiayaan.sewa_tempat_perbulan, pembiayaan.total_biaya_sewa, pembiayaan.sistem_pembayaran_sewa, pembiayaan.sumber_dana, pembiayaan.image, pembiayaan.created_by');
+        $this->db->select('pembiayaan.id_pembiayaan, pembiayaan.no_pinjaman, pembiayaan.name, pembiayaan.nik, pembiayaan.address, pembiayaan.email, pembiayaan.phone, pembiayaan.jml_pinjaman, pembiayaan.jangka_waktu_pinjam, pembiayaan.jenis_barang_gadai, pembiayaan.berat_barang_gadai, pembiayaan.waktu_gadai, pembiayaan.jatuh_tempo_gadai, pembiayaan.jangka_waktu_gadai, pembiayaan.sewa_tempat_perbulan, pembiayaan.total_biaya_sewa, pembiayaan.sistem_pembayaran_sewa, pembiayaan.sumber_dana, pembiayaan.image, pembiayaan.created_by');
 
         $this->db->where('is_delete_pembiayaan', '0');
 
