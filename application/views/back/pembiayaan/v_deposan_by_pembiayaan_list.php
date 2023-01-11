@@ -11,6 +11,7 @@
                     <th>Jumlah Serapan</th>
                     <th>Total Basil</th>
                     <th>Basil Deposan</th>
+                    <th>Basil Lembaga</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@
                         <td>Rp. <?php echo number_format($data->nominal, 0, ',', '.') ?></td>
                         <td>Rp. <?php echo number_format($data->total_basil, 0, ',', '.') ?></td>
                         <td>Rp. <?php echo number_format($data->basil_for_deposan, 0, ',', '.') ?></td>
+                        <td>Rp. <?php echo number_format($data->basil_for_lembaga, 0, ',', '.') ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
