@@ -224,6 +224,20 @@
                         $("#currentImage").html(data);
                     },
                 });
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/pembiayaan/get_sumber_dana/') ?>" + id_pembiayaan,
+                    success: function(data) {
+                        $("#showDeposanForUpdate").html(data);
+                    },
+                });
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/pembiayaan/button_component/') ?>" + id_pembiayaan,
+                    success: function(data) {
+                        $("#buttonComponent").html(data);
+                    },
+                });
             });
 
             $(document).on('click', '#detailPembiayaan', function() {

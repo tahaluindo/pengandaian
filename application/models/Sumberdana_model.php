@@ -53,4 +53,11 @@ class Sumberdana_model extends CI_Model
 
         return $this->db->get($this->table)->result();
     }
+
+    function cek_available_data($id_pembiayaan)
+    {
+        $this->db->where('pembiayaan_id', $id_pembiayaan);
+
+        return $this->db->get($this->table)->result();
+    }
 }

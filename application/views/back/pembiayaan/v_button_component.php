@@ -1,0 +1,1 @@
+<a href="<?php echo base_url('admin/pembiayaan/edit_sumber_dana/' . $id_pembiayaan) ?>" class="btn btn-warning">Edit Sumber Dana</a>
