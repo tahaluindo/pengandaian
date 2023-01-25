@@ -435,34 +435,51 @@ class Pembiayaan extends CI_Controller
         if ($this->input->post('sumber_dana') == 1) {
             $pembiayaan = $this->Pembiayaan_model->get_by_id($this->input->post('id_pembiayaan'));
 
-            $data_sumber_dana = array(
-                'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
-                'deposito_id'       => NULL,
-                'persentase'        => 100,
-                'nominal'           => $this->session->jml_pinjaman,
-                'total_basil'       => $pembiayaan->total_biaya_sewa,
-                'basil_for_lembaga' => $pembiayaan->total_biaya_sewa,
-                'created_by'        => $this->session->username,
-            );
-
-            $this->db->insert('sumber_dana', $data_sumber_dana);
-
-            write_log();
-
-            //MANIPULASI DATA INSTANSI
+            //Cek ketersediaan saldo tabungan
             $saldo_tabungan = $instansi->saldo_tabungan - $this->session->jml_pinjaman;
-            $resapan_tabungan = $instansi->resapan_tabungan + $this->session->jml_pinjaman;
 
-            $data = array(
-                'saldo_tabungan'    => $saldo_tabungan,
-                'resapan_tabungan'  => $resapan_tabungan,
-            );
+            if ($saldo_tabungan >= 0) {
+                $data_sumber_dana = array(
+                    'pembiayaan_id'     => $this->input->post('id_pembiayaan'),
+                    'deposito_id'       => NULL,
+                    'persentase'        => 100,
+                    'nominal'           => $this->session->jml_pinjaman,
+                    'total_basil'       => $pembiayaan->total_biaya_sewa,
+                    'basil_for_lembaga' => $pembiayaan->total_biaya_sewa,
+                    'created_by'        => $this->session->username,
+                );
 
-            $this->Instansi_model->update($this->session->instansi_id, $data);
+                $this->db->insert('sumber_dana', $data_sumber_dana);
 
-            $this->session->unset_userdata('id_anggota');
-            $this->session->unset_userdata('nama_anggota');
-            $this->session->unset_userdata('jml_pinjaman');
+                write_log();
+
+                //MANIPULASI DATA INSTANSI
+                $resapan_tabungan = $instansi->resapan_tabungan + $this->session->jml_pinjaman;
+
+                $data = array(
+                    'saldo_tabungan'    => $saldo_tabungan,
+                    'resapan_tabungan'  => $resapan_tabungan,
+                );
+
+                $this->Instansi_model->update($this->session->instansi_id, $data);
+
+                $this->session->unset_userdata('id_anggota');
+                $this->session->unset_userdata('nama_anggota');
+                $this->session->unset_userdata('jml_pinjaman');
+            } else {
+                //Hapus file di direktori images
+                $dir        = "./assets/images/barang_gadai/" . $pembiayaan->image;
+
+                if (is_file($dir)) {
+                    unlink($dir);
+                }
+
+                $this->Pembiayaan_model->delete($this->input->post('id_pembiayaan'));
+
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Proses Gagal. Saldo Tabungan Tidak Cukup!</b></h6></div>');
+                redirect('admin/pembiayaan');
+            }
+
         } elseif ($this->input->post('sumber_dana') == 2) {
             //Jalankan fitur add atau update
             //Dengan mengecek apakah di database sumber dana sudah ada datanya, jika sudah ada data berdasarkan pembiayaan id lakukan update dan jika tidak ada data lakukan add
@@ -883,6 +900,8 @@ class Pembiayaan extends CI_Controller
         $this->data['status_sumber_dana'] = 1;
 
         $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
+
+        $this->data['saldo_tabungan'] = (int) $this->data['instansi']->saldo_tabungan - (int) $this->session->jml_pinjaman;
 
         $this->data['nominal_sumber_dana_tabungan'] = [
             'name'          => 'nominal_sumber_dana_tabungan',

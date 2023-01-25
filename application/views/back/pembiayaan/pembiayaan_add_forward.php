@@ -40,6 +40,13 @@
                             <?php if ($this->session->flashdata('message')) {
                                 echo $this->session->flashdata('message');
                             } ?>
+
+                            <!-- Notifikasi Ketersediaan Saldo Tabungan -->
+                            <?php if ($saldo_tabungan < 0) { ?>
+                                <div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Saldo Tabungan Tidak Cukup!</b></h6></div>
+                            <?php } ?>
+                            <!-- Notifikasi Ketersediaan Saldo Tabungan -->
+
                             <!-- Content -->
                             <div class="card mb-4">
                                 <?php if ($status_sumber_dana == 1) { ?>
