@@ -52,7 +52,7 @@
                                 <?php if ($status_sumber_dana == 1) { ?>
                                     <div class="alert alert-info" role="alert">
                                         Nama Anggota : <b><?php echo $this->session->nama_anggota ?></b><br>
-                                        Jumlah Pinjaman Anggota : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?></b><br>
+                                        Jumlah Pinjaman Anggota : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?></b> <?php if ($saldo_tabungan < 0) { ?><a href="#" id="changePinjaman" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalChangePinjaman">Ubah Jumlah Pinjaman</a> <?php } ?><br>
                                         <hr>
                                         Saldo Tabungan Saat Ini : <b>Rp <?php echo number_format($instansi->saldo_tabungan, 0, ',', '.') ?></b><br>
                                         Dana Yang Digunakan : <b>Rp <?php echo number_format($this->session->jml_pinjaman, 0, ',', '.') ?> (100%)</b>
@@ -120,6 +120,10 @@
                     <?php $this->load->view('back/pembiayaan/modal_persentase'); ?>
                     <!-- Modal Persentase -->
 
+                    <!-- Modal Ubah Pinjaman -->
+                    <?php $this->load->view('back/pembiayaan/modal_change_pinjaman'); ?>
+                    <!-- Modal Ubah Pinjaman -->
+
                     <!-- Modal Logout -->
                     <?php $this->load->view('back/template/modal_logout'); ?>
                     <!-- Modal Logout -->
@@ -162,7 +166,7 @@
                 ordering: false,
             }); // ID From dataTable with Hover
 
-            $('#nominal_sumber_dana_tabungan').maskMoney({
+            $('#jml_pinjaman').maskMoney({
                 thousands: '.',
                 decimal: ',',
                 precision: 0

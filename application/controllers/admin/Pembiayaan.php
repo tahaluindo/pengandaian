@@ -897,19 +897,20 @@ class Pembiayaan extends CI_Controller
 
         $this->data['page_title'] = 'Sumber Dana Dari Tabungan';
 
+        $this->data['modal_action'] = 'admin/pembiayaan/change_pinjaman_action';
+
         $this->data['status_sumber_dana'] = 1;
 
         $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
 
         $this->data['saldo_tabungan'] = (int) $this->data['instansi']->saldo_tabungan - (int) $this->session->jml_pinjaman;
 
-        $this->data['nominal_sumber_dana_tabungan'] = [
-            'name'          => 'nominal_sumber_dana_tabungan',
-            'id'            => 'nominal_sumber_dana_tabungan',
+        $this->data['jml_pinjaman'] = [
+            'name'          => 'jml_pinjaman',
+            'id'            => 'jml_pinjaman',
             'class'         => 'form-control',
             'autocomplete'  => 'off',
             'required'      => '',
-            'value'         => $this->form_validation->set_value('nominal_sumber_dana_tabungan'),
         ];
         $this->data['id_pembiayaan'] = [
             'name'          => 'id_pembiayaan',
@@ -1493,5 +1494,22 @@ class Pembiayaan extends CI_Controller
         $this->data['current_image'] = $image;
 
         $this->load->view('back/pembiayaan/v_current_image_by_pembiayaan', $this->data);
+    }
+
+    function change_pinjaman_action()
+    {
+        //Ubah tipe data jml pinjaman
+        $string = $this->input->post('jml_pinjaman');
+        $jml_pinjaman = preg_replace("/[^0-9]/", "", $string);
+
+        $this->session->set_userdata('jml_pinjaman', $jml_pinjaman);
+
+        $data = array(
+            'jml_pinjaman'  => $jml_pinjaman
+        );
+
+        $this->Pembiayaan_model->update($this->session->id_anggota, $data);
+
+        redirect('admin/pembiayaan/sumber_dana_tabungan');
     }
 }
