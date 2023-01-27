@@ -46,6 +46,12 @@
 </div>
 
 <div class="alert alert-success" role="alert">
+    <!-- Notifikasi Ketersediaan Saldo Tabungan -->
+    <?php if ($cek_tabungan < 0) { ?>
+        <div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Saldo Tabungan Tidak Cukup!</b></h6></div>
+    <?php } ?>
+    <!-- Notifikasi Ketersediaan Saldo Tabungan -->
+
     <b>PENGGUNAAN DANA TABUNGAN</b><br>
     <hr>
     Saldo Tabungan Saat Ini : <b>Rp <?php echo number_format($instansi->saldo_tabungan, 0, ',', '.') ?></b><br>

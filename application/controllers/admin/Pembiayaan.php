@@ -901,8 +901,6 @@ class Pembiayaan extends CI_Controller
 
         $this->data['status_sumber_dana'] = 1;
 
-        $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
-
         $this->data['saldo_tabungan'] = (int) $this->data['instansi']->saldo_tabungan - (int) $this->session->jml_pinjaman;
 
         $this->data['jml_pinjaman'] = [
@@ -936,6 +934,8 @@ class Pembiayaan extends CI_Controller
         $this->data['status_sumber_dana'] = 3;
 
         $this->data['deposito'] = $this->Deposito_model->get_all();
+
+        $this->data['cek_tabungan'] = (int) $this->data['instansi']->saldo_tabungan - (int) $this->session->total_pinjaman;
 
         $this->data['nominal_sumber_dana_tabungan'] = [
             'name'          => 'nominal_sumber_dana_tabungan',
