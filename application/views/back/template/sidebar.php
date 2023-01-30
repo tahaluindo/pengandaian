@@ -65,5 +65,100 @@
     ?>
 
     <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Settings
+    </div>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="true"
+            aria-controls="collapsePage">
+            <i class="fas fa-fw fa-users"></i>
+            <span>User Management</span>
+        </a>
+        <div id="collapseUser" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">User Management</h6>
+                <a class="collapse-item" href="login.html">Add User</a>
+                <a class="collapse-item" href="register.html">User List</a>
+                <a class="collapse-item" href="404.html">Recycle Bin</a>
+            </div>
+        </div>
+    </li>
+    <?php if (is_grandadmin()) { ?>
+    <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-database"></i>
+            <span>Backup DB</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsertype" aria-expanded="true"
+            aria-controls="collapsePage">
+            <i class="fas fa-fw fa-gavel"></i>
+            <span>Usertype Management</span>
+        </a>
+        <div id="collapseUsertype" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Usertype Management</h6>
+                <a class="collapse-item" href="login.html">Add Usertype</a>
+                <a class="collapse-item" href="register.html">Usertype List</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMenu" aria-expanded="true"
+            aria-controls="collapsePage">
+            <i class="fas fa-fw fa-bars"></i>
+            <span>Menu Management</span>
+        </a>
+        <div id="collapseMenu" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Menu Management</h6>
+                <a class="collapse-item" href="login.html">Add Menu</a>
+                <a class="collapse-item" href="register.html">Menu List</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSubmenu" aria-expanded="true"
+            aria-controls="collapsePage">
+            <i class="fas fa-fw fa-bars"></i>
+            <span>SubMenu Management</span>
+        </a>
+        <div id="collapseSubmenu" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">SubMenu Management</h6>
+                <a class="collapse-item" href="login.html">Add SubMenu</a>
+                <a class="collapse-item" href="register.html">SubMenu List</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMenuAccess" aria-expanded="true"
+            aria-controls="collapsePage">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Access Management</span>
+        </a>
+        <div id="collapseMenuAccess" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Access Management</h6>
+                <a class="collapse-item" href="login.html">Add Menu Access</a>
+                <a class="collapse-item" href="register.html">Menu Access List</a>
+            </div>
+        </div>
+    </li>
+    <?php } ?>
+    <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Edit Profile</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-lock"></i>
+            <span>Ubah Password</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider">
     <div class="version" id="version-ruangadmin"></div>
 </ul>
