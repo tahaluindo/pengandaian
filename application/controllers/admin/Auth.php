@@ -275,6 +275,7 @@ class Auth extends CI_Controller
           'usertype_id'       => $this->input->post('usertype_id'),
           'created_by'        => $this->session->username,
           'ip_add_reg'        => $this->input->ip_address(),
+          'photo'             => 'noimage.jpg',
         );
 
         $this->Auth_model->insert($data);
@@ -1151,5 +1152,12 @@ class Auth extends CI_Controller
     else {
       echo "<div class='text-red'>Wajib diisi</div>";
     }
+  }
+
+  function get_image($image)
+  {
+    $this->data['image'] = $image;
+
+    $this->load->view('back/auth/v_show_image', $this->data);
   }
 }

@@ -11,7 +11,7 @@ class Auth_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.birthplace, users.birthdate, users.phone, users.address, users.photo, users.username, users.email, users.usertype_id, users.is_active, usertype.usertype_name
+      users.id_users, users.name, users.gender, users.birthplace, users.birthdate, users.phone, users.address, users.photo, users.username, users.email, users.usertype_id, users.is_active, usertype.usertype_name, users.created_by
     ');
 
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');

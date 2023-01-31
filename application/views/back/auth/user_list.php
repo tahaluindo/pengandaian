@@ -70,10 +70,24 @@
                                                     $is_active = '<a href="' . base_url('admin/auth/activate/' . $data->id_users) . '" class="badge badge-danger">INACTIVE</a>';
                                                 }
 
+                                                // status gender
+                                                if ($data->gender == '1') {
+                                                    $gender = 'Laki-laki';
+                                                } elseif ($data->gender == '2') {
+                                                    $gender = 'Perempuan';
+                                                }
+
+                                                //handle ketersediaan tanggal lahir
+                                                if ($data->birthdate != NULL) {
+                                                    $birthdate = date_indonesian_only($data->birthdate);
+                                                } else {
+                                                    $birthdate = '';
+                                                }
+
                                                 // Action
                                                 $edit = '<a href="#" id="editUser" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/auth/delete/' . $data->id_users) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" id="detailUser" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#modalDetailUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '"><i class="fas fa-info-circle"></i></a>';
+                                                $detail = '<a href="#" id="detailUser" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#modalDetailUser" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $birthdate . '" data-gender="' . $gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype="' . $data->usertype_name . '" data-created_by="' . $data->created_by . '" data-image="' . $data->photo . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
@@ -99,12 +113,11 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <?php $this->load->view('back/pembiayaan/modal_edit');
-                    ?>
+                    <?php //$this->load->view('back/auth/modal_edit'); ?>
                     <!-- Modal Edit -->
 
                     <!-- Modal detail -->
-                    <?php $this->load->view('back/pembiayaan/modal_detail'); ?>
+                    <?php $this->load->view('back/auth/modal_detail'); ?>
                     <!-- Modal detail -->
                 </div>
                 <!--Container Fluid-->
@@ -140,20 +153,8 @@
 
     <script>
         $(document).ready(function() {
-            $('#jml_pinjaman').maskMoney({
-                thousands: '.',
-                decimal: ',',
-                precision: 0
-            });
-
-            $('#jangka_waktu_pinjam').TouchSpin({
-                min: 0,
-                max: 100,
-                postfix: 'Bulan',
-                initval: 0,
-                boostat: 5,
-                maxboostedstep: 10
-            });
+            $('#dataTable').DataTable(); // ID From dataTable
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
 
             $('#waktu_gadai').datepicker({
                 startView: 2,
@@ -163,22 +164,40 @@
                 todayBtn: 'linked',
             });
 
-            $('#jatuh_tempo_gadai').datepicker({
-                startView: 2,
-                format: 'yyyy/mm/dd',
-                autoclose: true,
-                todayHighlight: true,
-                todayBtn: 'linked',
+            $(document).on('click', '#detailUser', function() {
+                const name = $(this).data('name');
+                const birthplace = $(this).data('birthplace');
+                const birthdate = $(this).data('birthdate');
+                const gender = $(this).data('gender');
+                const address = $(this).data('address');
+                const phone = $(this).data('phone');
+                const email = $(this).data('email');
+                const username = $(this).data('username');
+                const usertype = $(this).data('usertype');
+                const created_by = $(this).data('created_by');
+                const image = $(this).data('image');
+                $('.name').text(name);
+                $('.birthplace').text(birthplace);
+                $('.birthdate').text(birthdate);
+                $('.gender').text(gender);
+                $('.address').text(address);
+                $('.phone').text(phone);
+                $('.email').text(email);
+                $('.username').text(username);
+                $('.usertype').text(usertype);
+                $('.created_by').text(created_by);
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/auth/get_image/') ?>" + image,
+                    success: function(data) {
+                        $("#showImage").html(data);
+                    },
+                });
             });
         });
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable(); // ID From dataTable
-            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
-        });
-
         $(document).ready(function() {
             $(document).on('click', '#editPembiayaan', function() {
                 const id_pembiayaan = $(this).data('id_pembiayaan');
@@ -233,48 +252,7 @@
                 });
             });
 
-            $(document).on('click', '#detailPembiayaan', function() {
-                const id_pembiayaan = $(this).data('id_pembiayaan');
-                const no_pinjaman = $(this).data('no_pinjaman');
-                const name = $(this).data('name');
-                const nik = $(this).data('nik');
-                const address = $(this).data('address');
-                const email = $(this).data('email');
-                const phone = $(this).data('phone');
-                const jml_pinjaman = $(this).data('jml_pinjaman');
-                const jangka_waktu_pinjam = $(this).data('jangka_waktu_pinjam');
-                const jenis_barang_gadai = $(this).data('jenis_barang_gadai');
-                const berat_barang_gadai = $(this).data('berat_barang_gadai');
-                const waktu_gadai = $(this).data('waktu_gadai');
-                const jatuh_tempo_gadai = $(this).data('jatuh_tempo_gadai');
-                const jangka_waktu_gadai = $(this).data('jangka_waktu_gadai');
-                const sewa_tempat_perbulan = $(this).data('sewa_tempat_perbulan');
-                const total_biaya_sewa = $(this).data('total_biaya_sewa');
-                const sistem_pembayaran_sewa = $(this).data('sistem_pembayaran_sewa');
-                const sumber_dana = $(this).data('sumber_dana');
-                const image = $(this).data('image');
-                $('#showDaftar').val(id_pembiayaan);
-                $('#showImage').val(image);
-                $('.no_pinjaman').text(no_pinjaman);
-                $('.name').text(name);
-                $('.nik').text(nik);
-                $('.address').text(address);
-                $('.email').text(email);
-                $('.phone').text(phone);
-                $('.jml_pinjaman').text(jml_pinjaman);
-                $('.jangka_waktu_pinjam').text(jangka_waktu_pinjam);
-                $('.jenis_barang_gadai').text(jenis_barang_gadai);
-                $('.berat_barang_gadai').text(berat_barang_gadai);
-                $('.waktu_gadai').text(waktu_gadai);
-                $('.jatuh_tempo_gadai').text(jatuh_tempo_gadai);
-                $('.jangka_waktu_gadai').text(jangka_waktu_gadai);
-                $('.sewa_tempat_perbulan').text(sewa_tempat_perbulan);
-                $('.total_biaya_sewa').text(total_biaya_sewa);
-                $('.sistem_pembayaran_sewa').text(sistem_pembayaran_sewa);
-                $('.sumber_dana').text(sumber_dana);
 
-
-            });
 
             $(document).on('click', '#showDaftar', function() {
                 const id_pembiayaan = $(this).val();
