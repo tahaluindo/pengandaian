@@ -50,40 +50,38 @@
                                     <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>No Anggota</th>
+                                                <th>No</th>
                                                 <th>Nama</th>
-                                                <th>Jumlah Pinjaman</th>
-                                                <th>Dibuat Oleh</th>
-                                                <th>Aksi</th>
+                                                <th>Username</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Usertype</th>
+                                                <th width="25px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
+                                            $no = 1;
                                             foreach ($get_all as $data) {
-                                                if ($data->sistem_pembayaran_sewa == 1) {
-                                                    $sistem_pembayaran_sewa = 'Bulanan';
-                                                } elseif ($data->sistem_pembayaran_sewa == 2) {
-                                                    $sistem_pembayaran_sewa = 'Jatuh Tempo';
-                                                }
-
-                                                if ($data->sumber_dana == 1) {
-                                                    $sumber_dana = 'Tabungan';
-                                                } elseif ($data->sumber_dana == 2) {
-                                                    $sumber_dana = 'Deposito';
-                                                } elseif ($data->sumber_dana == 3) {
-                                                    $sumber_dana = 'Tabungan dan Deposito';
+                                                // status active
+                                                if ($data->is_active == '1') {
+                                                    $is_active = '<a href="' . base_url('admin/auth/deactivate/' . $data->id_users) . '" class="badge badge-success">ACTIVE</a>';
+                                                } else {
+                                                    $is_active = '<a href="' . base_url('admin/auth/activate/' . $data->id_users) . '" class="badge badge-danger">INACTIVE</a>';
                                                 }
 
                                                 // Action
-                                                $edit = '<a href="#" id="editPembiayaan" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#exampleModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . $data->jml_pinjaman . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . $data->waktu_gadai . '" data-jatuh_tempo_gadai="' . $data->jatuh_tempo_gadai . '" data-sistem_pembayaran_sewa="' . $data->sistem_pembayaran_sewa . '" data-sumber_dana="' . $data->sumber_dana . '" data-image="' . $data->image . '"><i class="fas fa-pen"></i></a>';
-                                                $delete = '<a href="' . base_url('admin/pembiayaan/delete/' . $data->id_pembiayaan) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
-                                                $detail = '<a href="#" id="detailPembiayaan" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#detailModal" data-id_pembiayaan="' . $data->id_pembiayaan . '" data-no_pinjaman="' . $data->no_pinjaman . '" data-name="' . $data->name . '" data-nik="' . $data->nik . '" data-address="' . $data->address . '" data-email="' . $data->email . '" data-phone="' . $data->phone . '" data-jml_pinjaman="' . number_format($data->jml_pinjaman, 0, ',', '.') . '" data-jangka_waktu_pinjam="' . $data->jangka_waktu_pinjam . '" data-jenis_barang_gadai="' . $data->jenis_barang_gadai . '" data-berat_barang_gadai="' . $data->berat_barang_gadai . '" data-waktu_gadai="' . date_indonesian_only($data->waktu_gadai) . '" data-jatuh_tempo_gadai="' . date_indonesian_only($data->jatuh_tempo_gadai) . '" data-jangka_waktu_gadai="' . $data->jangka_waktu_gadai . '" data-sewa_tempat_perbulan="' . number_format($data->sewa_tempat_perbulan, 0, ',', '.') . '" data-total_biaya_sewa="' . number_format($data->total_biaya_sewa, 0, ',', '.') . '" data-sistem_pembayaran_sewa="' . $sistem_pembayaran_sewa . '" data-sumber_dana="' . $sumber_dana . '" data-image="' . $data->image . '"><i class="fas fa-info-circle"></i></a>';
+                                                $edit = '<a href="#" id="editUser" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '"><i class="fas fa-pen"></i></a>';
+                                                $delete = '<a href="' . base_url('admin/auth/delete/' . $data->id_users) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
+                                                $detail = '<a href="#" id="detailUser" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#modalDetailUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
                                                 <tr>
-                                                    <td><?php echo $data->no_pinjaman ?></td>
+                                                    <td><?php echo $no++ ?></td>
                                                     <td><?php echo $data->name ?></td>
-                                                    <td>Rp. <?php echo number_format($data->jml_pinjaman, 0, ',', '.') ?></td>
-                                                    <td><?php echo $data->created_by ?></td>
+                                                    <td><?php echo $data->username ?></td>
+                                                    <td><?php echo $data->email ?></td>
+                                                    <td><?php echo $is_active ?></td>
+                                                    <td><?php echo $data->usertype_name ?></td>
                                                     <td><?php echo $detail ?> <?php echo $edit ?> <?php echo $delete ?></td>
                                                 </tr>
                                             <?php } ?>
@@ -177,13 +175,8 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable({
-                searching: false,
-                paging: false
-            }); // ID From dataTable
-            $('#dataTableHover').DataTable({
-                ordering: false,
-            }); // ID From dataTable with Hover
+            $('#dataTable').DataTable(); // ID From dataTable
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
         });
 
         $(document).ready(function() {
