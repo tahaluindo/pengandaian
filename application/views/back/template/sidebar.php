@@ -77,9 +77,9 @@
         <div id="collapseUser" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User Management</h6>
-                <a class="collapse-item" href="login.html">Add User</a>
-                <a class="collapse-item" href="register.html">User List</a>
-                <a class="collapse-item" href="404.html">Recycle Bin</a>
+                <a class="collapse-item" href="<?php echo base_url('admin/auth/create') ?>">Add User</a>
+                <a class="collapse-item" href="<?php echo base_url('admin/auth/index') ?>">User List</a>
+                <a class="collapse-item" href="<?php echo base_url('admin/auth/deleted_list') ?>">Recycle Bin</a>
             </div>
         </div>
     </li>

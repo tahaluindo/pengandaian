@@ -21,14 +21,14 @@ class Usertype_model extends CI_Model{
     {
       foreach($data->result_array() as $row)
       {
-        $result[''] = '- Please Choose Usertype';
+        $result[''] = '- Silahkan Pilih Usertype';
         $result[$row['id_usertype']] = $row['usertype_name'];
       }
       return $result;
     }
   }
 
-  function get_all_combobox_by_instansi()
+  function get_all_combobox_for_masteradmin()
   {
     $this->db->where('id_usertype >', '1');
     $this->db->where('id_usertype <', '5');
@@ -48,7 +48,7 @@ class Usertype_model extends CI_Model{
     }
   }
 
-  function get_all_combobox_by_cabang()
+  function get_all_combobox_for_superadmin()
   {
     $this->db->where('id_usertype >', '2');
     $this->db->where('id_usertype <', '5');

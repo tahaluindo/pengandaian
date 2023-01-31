@@ -16,67 +16,50 @@ class Auth extends CI_Controller
 
     $this->data['module'] = 'User';
 
-    $this->data['company_data']             = $this->Company_model->company_profile();
-    $this->data['layout_template']          = $this->Template_model->layout();
-    $this->data['skins_template']           = $this->Template_model->skins();
-    $this->data['footer']                   = $this->Footer_model->footer();
+    $this->data['instansi'] = $this->Instansi_model->get_by_id($this->session->instansi_id);
 
     $this->data['btn_submit'] = 'Save';
     $this->data['btn_reset']  = 'Reset';
     $this->data['btn_add']    = 'Tambah Data';
     $this->data['add_action'] = base_url('admin/auth/create');
+
+    is_login();
   }
 
   function index()
   {
-    is_login();
     is_read();
 
     if (is_admin() or is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman tersebut</div>');
       redirect('admin/dashboard');
     }
 
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
-    if (is_grandadmin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all();
-    } elseif (is_masteradmin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all_by_cabang();
-    }
+    $this->data['get_all'] = $this->Auth_model->get_all();
 
     $this->load->view('back/auth/user_list', $this->data);
   }
 
   function create()
   {
-    is_login();
     is_create();
 
     if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman tersebut</div>');
       redirect('admin/dashboard');
     }
 
     if (is_grandadmin()) {
-      $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox();
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
     } elseif (is_masteradmin()) {
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->session->instansi_id);
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_masteradmin();
     } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_cabang($this->session->cabang_id);
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_superadmin();
     }
 
-    $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
-    $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
-    $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
+    $this->data['get_all_data_access'] = $this->Dataaccess_model->get_all();
 
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/auth/create_action';
@@ -88,6 +71,17 @@ class Auth extends CI_Controller
       'autocomplete'  => 'off',
       'required'      => '',
       'value'         => $this->form_validation->set_value('name'),
+    ];
+    $this->data['gender'] = [
+      'name'          => 'gender',
+      'id'            => 'gender',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
+    $this->data['gender_value'] = [
+      ''              => '- Pilih Jenis Kelamin -',
+      '1'             => 'Laki-laki',
+      '2'             => 'Perempuan',
     ];
     $this->data['birthdate'] = [
       'name'          => 'birthdate',
@@ -103,21 +97,11 @@ class Auth extends CI_Controller
       'autocomplete'  => 'off',
       'value'         => $this->form_validation->set_value('birthplace'),
     ];
-    $this->data['gender'] = [
-      'name'          => 'gender',
-      'id'            => 'gender',
-      'class'         => 'form-control',
-    ];
-    $this->data['gender_value'] = [
-      '1'             => 'Male',
-      '2'             => 'Female',
-    ];
     $this->data['address'] = [
       'name'          => 'address',
       'id'            => 'address',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'rows'           => '3',
       'value'         => $this->form_validation->set_value('address'),
     ];
     $this->data['phone'] = [
@@ -125,16 +109,10 @@ class Auth extends CI_Controller
       'id'            => 'phone',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'value'         => $this->form_validation->set_value('phone'),
-    ];
-    $this->data['email'] = [
-      'name'          => 'email',
-      'id'            => 'email',
-      'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'onChange'      => 'checkEmail()',
+      'placeholder'   => '8xxxxxxxxxx',
       'required'      => '',
-      'value'         => $this->form_validation->set_value('email'),
+      'value'         => $this->form_validation->set_value('phone'),
+      'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
     ];
     $this->data['username'] = [
       'name'          => 'username',
@@ -144,6 +122,15 @@ class Auth extends CI_Controller
       'onChange'      => 'checkUsername()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('username'),
+    ];
+    $this->data['email'] = [
+      'name'          => 'email',
+      'id'            => 'email',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'onChange'      => 'checkEmail()',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('email'),
     ];
     $this->data['password'] = [
       'name'          => 'password',
@@ -161,38 +148,11 @@ class Auth extends CI_Controller
       'required'      => '',
       'value'         => $this->form_validation->set_value('password_confirm'),
     ];
-    $this->data['instansi_id'] = [
-      'name'          => 'instansi_id',
-      'id'            => 'instansi_id',
-      'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
-      'required'      => '',
-    ];
-    $this->data['cabang_id'] = [
-      'name'          => 'cabang_id',
-      'id'            => 'cabang_id',
-      'class'         => 'form-control',
-      'onChange'      => 'tampilDivisi()',
-      'required'      => '',
-    ];
-    $this->data['divisi_id'] = [
-      'name'          => 'divisi_id',
-      'id'            => 'divisi_id',
-      'class'         => 'form-control',
-      'required'      => '',
-    ];
     $this->data['usertype_id'] = [
       'name'          => 'usertype_id',
       'id'            => 'usertype_id',
       'class'         => 'form-control',
       'required'      => '',
-    ];
-    $this->data['data_access_id'] = [
-      'name'          => 'data_access_id[]',
-      'id'            => 'data_access_id',
-      'class'         => 'form-control select2',
-      'required'      => '',
-      'multiple'      => '',
     ];
 
     $this->load->view('back/auth/user_add', $this->data);
@@ -201,14 +161,14 @@ class Auth extends CI_Controller
   function create_action()
   {
     $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
-    $this->form_validation->set_rules('phone', 'No. HP', 'trim|is_numeric');
+    $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+    $this->form_validation->set_rules('phone', 'No. HP/Telephone', 'trim|is_numeric|required');
     $this->form_validation->set_rules('username', 'Username', 'trim|is_unique[users.username]|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[users.email]|required');
-    $this->form_validation->set_rules('divisi_id', 'Divisi', 'required');
-    $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
-    $this->form_validation->set_rules('data_access_id[]', 'Data Access', 'required');
     $this->form_validation->set_rules('password', 'Password', 'trim|min_length[8]|required');
     $this->form_validation->set_rules('password_confirm', 'Konfirmasi Password', 'trim|matches[password]|required');
+    $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
+    $this->form_validation->set_rules('data_access_id[]', 'Data Access', 'required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_numeric', '{field} harus angka');
@@ -219,24 +179,16 @@ class Auth extends CI_Controller
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
-    if (is_grandadmin()) {
-      $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_masteradmin()) {
-      $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->session->userdata('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-    }
-
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
       $password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+
+      //Format no telephone
+      $phone = '62' . $this->input->post('phone');
+
+      //Format penulisan username
+      $username = str_replace(' ', '', strtolower($this->input->post('username')));
 
       if ($_FILES['photo']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
@@ -268,18 +220,16 @@ class Auth extends CI_Controller
 
           $data = array(
             'name'              => $this->input->post('name'),
+            'gender'            => $this->input->post('gender'),
             'birthdate'         => $this->input->post('birthdate'),
             'birthplace'        => $this->input->post('birthplace'),
-            'gender'            => $this->input->post('gender'),
             'address'           => $this->input->post('address'),
-            'phone'             => $this->input->post('phone'),
+            'phone'             => $phone,
             'email'             => $this->input->post('email'),
-            'username'          => strtolower($this->input->post('username')),
+            'username'          => $username,
             'password'          => $password,
-            'instansi_id'       => $instansi_id,
-            'cabang_id'         => $cabang_id,
-            'divisi_id'         => $divisi_id,
-            'usertype_id'          => $this->input->post('usertype_id'),
+            'instansi_id'       => $this->session->instansi_id,
+            'usertype_id'       => $this->input->post('usertype_id'),
             'created_by'        => $this->session->username,
             'ip_add_reg'        => $this->input->ip_address(),
             'photo'             => $this->upload->data('file_name'),
@@ -295,36 +245,34 @@ class Auth extends CI_Controller
           if (!empty($this->input->post('data_access_id'))) {
             $data_access_id = count($this->input->post('data_access_id'));
 
-            for ($i_data_access_id = 0; $i_data_access_id < $data_access_id; $i_data_access_id++) {
-              $datas_data_access_id[$i_data_access_id] = array(
+            for ($i = 0; $i < $data_access_id; $i++) {
+              $datas_data_access_id[$i] = array(
                 'user_id'           => $user_id,
-                'data_access_id'    => $this->input->post('data_access_id[' . $i_data_access_id . ']'),
+                'data_access_id'    => $this->input->post('data_access_id[' . $i . ']'),
               );
 
-              $this->db->insert('users_data_access', $datas_data_access_id[$i_data_access_id]);
+              $this->db->insert('users_data_access', $datas_data_access_id[$i]);
 
               write_log();
             }
           }
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
           redirect('admin/auth');
         }
       } else {
         $data = array(
           'name'              => $this->input->post('name'),
+          'gender'            => $this->input->post('gender'),
           'birthdate'         => $this->input->post('birthdate'),
           'birthplace'        => $this->input->post('birthplace'),
-          'gender'            => $this->input->post('gender'),
           'address'           => $this->input->post('address'),
-          'phone'             => $this->input->post('phone'),
+          'phone'             => $phone,
           'email'             => $this->input->post('email'),
-          'username'          => strtolower($this->input->post('username')),
+          'username'          => $username,
           'password'          => $password,
-          'instansi_id'       => $instansi_id,
-          'cabang_id'         => $cabang_id,
-          'divisi_id'         => $divisi_id,
-          'usertype_id'          => $this->input->post('usertype_id'),
+          'instansi_id'       => $this->session->instansi_id,
+          'usertype_id'       => $this->input->post('usertype_id'),
           'created_by'        => $this->session->username,
           'ip_add_reg'        => $this->input->ip_address(),
         );
@@ -338,19 +286,19 @@ class Auth extends CI_Controller
         if (!empty($this->input->post('data_access_id'))) {
           $data_access_id = count($this->input->post('data_access_id'));
 
-          for ($i_data_access_id = 0; $i_data_access_id < $data_access_id; $i_data_access_id++) {
-            $datas_data_access_id[$i_data_access_id] = array(
+          for ($i = 0; $i < $data_access_id; $i++) {
+            $datas_data_access_id[$i] = array(
               'user_id'           => $user_id,
-              'data_access_id'    => $this->input->post('data_access_id[' . $i_data_access_id . ']'),
+              'data_access_id'    => $this->input->post('data_access_id[' . $i . ']'),
             );
 
-            $this->db->insert('users_data_access', $datas_data_access_id[$i_data_access_id]);
+            $this->db->insert('users_data_access', $datas_data_access_id[$i]);
 
             write_log();
           }
         }
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
         redirect('admin/auth');
       }
     }
@@ -358,7 +306,6 @@ class Auth extends CI_Controller
 
   function update($id)
   {
-    is_login();
     is_update();
 
     $this->data['user']     = $this->Auth_model->get_by_id($id);
@@ -666,7 +613,6 @@ class Auth extends CI_Controller
 
   function delete($id)
   {
-    is_login();
     is_delete();
 
     if (is_admin() and is_pegawai()) {
@@ -697,7 +643,6 @@ class Auth extends CI_Controller
 
   function delete_permanent($id)
   {
-    is_login();
     is_delete();
 
     if (is_admin() and is_pegawai()) {
@@ -728,7 +673,6 @@ class Auth extends CI_Controller
 
   function deleted_list()
   {
-    is_login();
     is_restore();
 
     if (is_admin() and is_pegawai()) {
@@ -752,7 +696,6 @@ class Auth extends CI_Controller
 
   function restore($id)
   {
-    is_login();
     is_restore();
 
     if (is_admin() and is_pegawai()) {
@@ -781,8 +724,6 @@ class Auth extends CI_Controller
 
   function activate($id)
   {
-    is_login();
-
     if (is_admin() and is_pegawai()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
@@ -796,8 +737,6 @@ class Auth extends CI_Controller
 
   function deactivate($id)
   {
-    is_login();
-
     if (is_admin() and is_pegawai()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
@@ -811,8 +750,6 @@ class Auth extends CI_Controller
 
   function update_profile($id)
   {
-    is_login();
-
     $this->data['user']     = $this->Auth_model->get_by_id($id);
 
     if ($id != $this->session->id_users) {
@@ -998,8 +935,6 @@ class Auth extends CI_Controller
 
   function change_password()
   {
-    is_login();
-
     $this->data['page_title'] = 'Ubah Password';
     $this->data['action']     = 'admin/auth/change_password_action';
 
