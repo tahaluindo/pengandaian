@@ -109,7 +109,6 @@ class Auth extends CI_Controller
       'id'            => 'username',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'onChange'      => 'checkUsername()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('username'),
     ];
@@ -118,7 +117,6 @@ class Auth extends CI_Controller
       'id'            => 'email',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'onChange'      => 'checkEmail()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('email'),
     ];
@@ -209,7 +207,6 @@ class Auth extends CI_Controller
       'id'            => 'username',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'onChange'      => 'checkUsername()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('username'),
     ];
@@ -218,7 +215,6 @@ class Auth extends CI_Controller
       'id'            => 'email',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'onChange'      => 'checkEmail()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('email'),
     ];
@@ -400,20 +396,19 @@ class Auth extends CI_Controller
     $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
     $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
     $this->form_validation->set_rules('phone', 'No. HP/Telephone', 'trim|is_numeric|required');
-    $this->form_validation->set_rules('username', 'Username', 'trim|is_unique[users.username]|required');
-    $this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[users.email]|required');
+    $this->form_validation->set_rules('username', 'Username', 'trim|required');
+    $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
     $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
     $this->form_validation->set_rules('data_access_id[]', 'Data Access', 'required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_numeric', '{field} harus angka');
-    $this->form_validation->set_message('is_unique', '{field} telah ada, silahkan ganti yang lain');
     $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
     if ($this->form_validation->run() === FALSE) {
-      redirect('admin/auth');
+      $this->index();
     } else {
       //Format penulisan username
       $username = str_replace(' ', '', strtolower($this->input->post('username')));
@@ -625,7 +620,7 @@ class Auth extends CI_Controller
     is_restore();
 
     if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
@@ -633,6 +628,7 @@ class Auth extends CI_Controller
 
     if ($row) {
       $data = array(
+        'is_active'   => '1',
         'is_delete'   => '0',
         'deleted_by'  => NULL,
         'deleted_at'  => NULL,
@@ -640,10 +636,10 @@ class Auth extends CI_Controller
 
       $this->Auth_model->update($id, $data);
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dikembalikan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dikembalikan!</b></h6></div>');
       redirect('admin/auth/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
       redirect('admin/auth');
     }
   }

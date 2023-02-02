@@ -13,11 +13,11 @@
                 <h5 class="m-0 font-weight-bold text-primary">Data Personal</h5>
                 <br>
                 <div class="form-group">
-                    <label>Nama Lengkap</label>
+                    <label>Nama Lengkap<span style="color: red">*</span></label>
                     <?php echo form_input($name) ?>
                 </div>
                 <div class="form-group">
-                    <label>Jenis Kelamin</label>
+                    <label>Jenis Kelamin<span style="color: red">*</span></label>
                     <?php echo form_dropdown('', $gender_value, '', $gender) ?>
                 </div>
                 <div class="form-group">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>No HP/Telephone/WhatsApp</label>
+                    <label>No HP/Telephone/WhatsApp<span style="color: red">*</span></label>
                     <?php echo form_input($phone) ?>
                 </div>
                 <div class="form-group">
@@ -61,19 +61,19 @@
                 <h5 class="m-0 font-weight-bold text-primary">Data Authentikasi</h5>
                 <br>
                 <div class="form-group">
-                    <label>Username</label>
+                    <label>Username<span style="color: red">*</span></label>
                     <?php echo form_input($username) ?>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
+                    <label>Email<span style="color: red">*</span></label>
                     <?php echo form_input($email) ?>
                 </div>
                 <div class="form-group">
-                    <label>Usertype</label>
+                    <label>Usertype<span style="color: red">*</span></label>
                     <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
                 </div>
                 <div class="form-group">
-                    <label>Akses Data</label>
+                    <label>Akses Data<span style="color: red">*</span></label>
                     <div id="currentAccessData"></div>
                 </div>
                 <!-- Content -->
