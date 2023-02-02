@@ -39,6 +39,96 @@ class Auth extends CI_Controller
 
     $this->data['get_all'] = $this->Auth_model->get_all();
 
+    if (is_grandadmin()) {
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
+    } elseif (is_masteradmin()) {
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_masteradmin();
+    } elseif (is_superadmin()) {
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_superadmin();
+    }
+
+    $this->data['get_all_data_access'] = $this->Dataaccess_model->get_all();
+
+    $this->data['id_users'] = [
+      'name'          => 'id_users',
+      'id'            => 'id_users',
+      'type'          => 'hidden',
+    ];
+    $this->data['name'] = [
+      'name'          => 'name',
+      'id'            => 'name',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('name'),
+    ];
+    $this->data['gender'] = [
+      'name'          => 'gender',
+      'id'            => 'gender',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
+    $this->data['gender_value'] = [
+      ''              => '- Pilih Jenis Kelamin -',
+      '1'             => 'Laki-laki',
+      '2'             => 'Perempuan',
+    ];
+    $this->data['birthdate'] = [
+      'name'          => 'birthdate',
+      'id'            => 'birthdate',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'value'         => $this->form_validation->set_value('birthdate'),
+    ];
+    $this->data['birthplace'] = [
+      'name'          => 'birthplace',
+      'id'            => 'birthplace',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'value'         => $this->form_validation->set_value('birthplace'),
+    ];
+    $this->data['address'] = [
+      'name'          => 'address',
+      'id'            => 'address',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'value'         => $this->form_validation->set_value('address'),
+    ];
+    $this->data['phone'] = [
+      'name'          => 'phone',
+      'id'            => 'phone',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'placeholder'   => '8xxxxxxxxxx',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('phone'),
+      'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
+    ];
+    $this->data['username'] = [
+      'name'          => 'username',
+      'id'            => 'username',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'onChange'      => 'checkUsername()',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('username'),
+    ];
+    $this->data['email'] = [
+      'name'          => 'email',
+      'id'            => 'email',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'onChange'      => 'checkEmail()',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('email'),
+    ];
+    $this->data['usertype_id'] = [
+      'name'          => 'usertype_id',
+      'id'            => 'usertype_id',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
+
     $this->load->view('back/auth/user_list', $this->data);
   }
 
@@ -1159,5 +1249,20 @@ class Auth extends CI_Controller
     $this->data['image'] = $image;
 
     $this->load->view('back/auth/v_show_image', $this->data);
+  }
+
+  function current_image_for_edit_user($image)
+  {
+      $this->data['current_image'] = $image;
+
+      $this->load->view('back/auth/v_current_image_by_user', $this->data);
+  }
+
+  function current_access_data($id_users)
+  {
+    $this->data['id_users'] = $id_users;
+    $this->data['get_all_data_access'] = $this->Dataaccess_model->get_all();
+
+    $this->load->view('back/auth/v_current_access_data', $this->data);
   }
 }

@@ -85,7 +85,7 @@
                                                 }
 
                                                 // Action
-                                                $edit = '<a href="#" id="editUser" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '"><i class="fas fa-pen"></i></a>';
+                                                $edit = '<a href="#" id="editUser" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditUser" data-id_users="' . $data->id_users . '" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $data->birthdate . '" data-gender="' . $data->gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype_id="' . $data->usertype_id . '" data-image="' . $data->photo . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/auth/delete/' . $data->id_users) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
                                                 $detail = '<a href="#" id="detailUser" class="btn btn-sm btn-info" title="Detail Data" data-toggle="modal" data-target="#modalDetailUser" data-name="' . $data->name . '" data-birthplace="' . $data->birthplace . '" data-birthdate="' . $birthdate . '" data-gender="' . $gender . '" data-address="' . $data->address . '" data-phone="' . $data->phone . '" data-email="' . $data->email . '" data-username="' . $data->username . '" data-usertype="' . $data->usertype_name . '" data-created_by="' . $data->created_by . '" data-image="' . $data->photo . '"><i class="fas fa-info-circle"></i></a>';
                                             ?>
@@ -113,7 +113,7 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <?php //$this->load->view('back/auth/modal_edit'); ?>
+                    <?php $this->load->view('back/auth/modal_edit'); ?>
                     <!-- Modal Edit -->
 
                     <!-- Modal detail -->
@@ -156,7 +156,7 @@
             $('#dataTable').DataTable(); // ID From dataTable
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
 
-            $('#waktu_gadai').datepicker({
+            $('#birthdate').datepicker({
                 startView: 2,
                 format: 'yyyy/mm/dd',
                 autoclose: true,
@@ -194,90 +194,41 @@
                     },
                 });
             });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '#editPembiayaan', function() {
-                const id_pembiayaan = $(this).data('id_pembiayaan');
+            $(document).on('click', '#editUser', function() {
+                const id_users = $(this).data('id_users');
                 const name = $(this).data('name');
-                const nik = $(this).data('nik');
+                const birthplace = $(this).data('birthplace');
+                const birthdate = $(this).data('birthdate');
+                const gender = $(this).data('gender');
                 const address = $(this).data('address');
-                const email = $(this).data('email');
                 const phone = $(this).data('phone');
-                const jml_pinjaman = $(this).data('jml_pinjaman');
-                const jangka_waktu_pinjam = $(this).data('jangka_waktu_pinjam');
-                const jenis_barang_gadai = $(this).data('jenis_barang_gadai');
-                const berat_barang_gadai = $(this).data('berat_barang_gadai');
-                const waktu_gadai = $(this).data('waktu_gadai');
-                const jatuh_tempo_gadai = $(this).data('jatuh_tempo_gadai');
-                const sistem_pembayaran_sewa = $(this).data('sistem_pembayaran_sewa');
-                const sumber_dana = $(this).data('sumber_dana');
+                const email = $(this).data('email');
+                const username = $(this).data('username');
+                const usertype_id = $(this).data('usertype_id');
                 const image = $(this).data('image');
-                $('#id_pembiayaan').val(id_pembiayaan);
+                $('#id_users').val(id_users);
                 $('#name').val(name);
-                $('#nik').val(nik);
+                $('#birthplace').val(birthplace);
+                $('#birthdate').val(birthdate);
+                $('#gender').val(gender);
                 $('#address').val(address);
-                $('#email').val(email);
                 $('#phone').val(phone);
-                $('#jml_pinjaman').val(jml_pinjaman);
-                $('#jangka_waktu_pinjam').val(jangka_waktu_pinjam);
-                $('#jenis_barang_gadai').val(jenis_barang_gadai);
-                $('#berat_barang_gadai').val(berat_barang_gadai);
-                $('#waktu_gadai').val(waktu_gadai);
-                $('#jatuh_tempo_gadai').val(jatuh_tempo_gadai);
-                $('#sistem_pembayaran_sewa').val(sistem_pembayaran_sewa);
-                $('#sumber_dana').val(sumber_dana);
+                $('#email').val(email);
+                $('#username').val(username);
+                $('#usertype_id').val(usertype_id);
 
                 jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/current_image_for_edit_pembiayaan/') ?>" + image,
+                    url: "<?php echo base_url('admin/auth/current_image_for_edit_user/') ?>" + image,
                     success: function(data) {
                         $("#currentImage").html(data);
                     },
                 });
 
                 jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/get_sumber_dana/') ?>" + id_pembiayaan,
+                    url: "<?php echo base_url('admin/auth/current_access_data/') ?>" + id_users,
                     success: function(data) {
-                        $("#showDeposanForUpdate").html(data);
-                    },
-                });
-
-                jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/button_component/') ?>" + id_pembiayaan,
-                    success: function(data) {
-                        $("#buttonComponent").html(data);
-                    },
-                });
-            });
-
-
-
-            $(document).on('click', '#showDaftar', function() {
-                const id_pembiayaan = $(this).val();
-
-                jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/get_sumber_dana/') ?>" + id_pembiayaan,
-                    beforeSend: function(data) {
-                        $("#showDeposan").html('<center><h1><i class="fa fa-spin fa-spinner" /></h1></center>');
-                    },
-                    success: function(data) {
-                        $("#showDeposan").html(data);
-                    },
-                });
-            });
-
-            $(document).on('click', '#showImage', function() {
-                const image = $(this).val();
-
-                jQuery.ajax({
-                    url: "<?php echo base_url('admin/pembiayaan/get_image/') ?>" + image,
-                    beforeSend: function(data) {
-                        $("#showBarangGadai").html('<center><h1><i class="fa fa-spin fa-spinner" /></h1></center>');
-                    },
-                    success: function(data) {
-                        $("#showBarangGadai").html(data);
+                        $("#currentAccessData").html(data);
                     },
                 });
             });
@@ -307,6 +258,26 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '#showImage', function() {
+                const image = $(this).val();
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/pembiayaan/get_image/') ?>" + image,
+                    beforeSend: function(data) {
+                        $("#showBarangGadai").html('<center><h1><i class="fa fa-spin fa-spinner" /></h1></center>');
+                    },
+                    success: function(data) {
+                        $("#showBarangGadai").html(data);
+                    },
+                });
+            });
+        });
+
+
     </script>
 </body>
 
