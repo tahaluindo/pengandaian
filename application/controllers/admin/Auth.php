@@ -556,6 +556,7 @@ class Auth extends CI_Controller
 
     if ($delete) {
       $data = array(
+        'is_active'   => '0',
         'is_delete'   => '1',
         'deleted_by'  => $this->session->username,
         'deleted_at'  => date('Y-m-d H:i:a'),
@@ -608,20 +609,13 @@ class Auth extends CI_Controller
     is_restore();
 
     if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman tersebut</div>');
       redirect('admin/dashboard');
     }
 
-    $this->data['page_title'] = 'Deleted ' . $this->data['module'] . ' List';
+    $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
-    if (is_grandadmin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted();
-    } elseif (is_masteradmin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_cabang();
-    }
-
+    $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted();
 
     $this->load->view('back/auth/user_deleted_list', $this->data);
   }

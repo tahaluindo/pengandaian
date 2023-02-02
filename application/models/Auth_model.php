@@ -302,7 +302,7 @@ class Auth_model extends CI_Model
   {
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype');
     $this->db->where('is_delete', '1');
-    $this->db->order_by('name', $this->order);
+    $this->db->order_by($this->id, $this->order);
     return $this->db->get($this->table)->result();
   }
 
