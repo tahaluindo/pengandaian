@@ -33,50 +33,37 @@ class Auth_model extends CI_Model
     return $this->db->get($this->table)->row();
   }
 
-  function get_all_by_instansi()
+  function get_all_for_masteradmin()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.cabang_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
-      usertype.usertype_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name
+      users.id_users, users.name, users.gender, users.birthplace, users.birthdate, users.phone, users.address, users.photo, users.username, users.email, users.usertype_id, users.is_active, usertype.usertype_name, users.created_by
     ');
+
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
-    $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
 
     $this->db->where('users.instansi_id', $this->session->instansi_id);
     $this->db->where('users.usertype_id >', '1');
     $this->db->where('users.usertype_id <', '5');
     $this->db->where('is_delete', '0');
 
-    $this->db->order_by('name', $this->order);
+    $this->db->order_by($this->id, $this->order);
 
     return $this->db->get($this->table)->result();
   }
 
-  function get_all_by_cabang()
+  function get_all_for_superadmin()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.cabang_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
-      usertype.usertype_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name
+      users.id_users, users.name, users.gender, users.birthplace, users.birthdate, users.phone, users.address, users.photo, users.username, users.email, users.usertype_id, users.is_active, usertype.usertype_name, users.created_by
     ');
-    $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
+
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
 
-    $this->db->where('users.cabang_id', $this->session->cabang_id);
     $this->db->where('users.usertype_id >', '2');
     $this->db->where('users.usertype_id <', '5');
     $this->db->where('is_delete', '0');
 
-    $this->db->order_by('name', $this->order);
+    $this->db->order_by($this->id, $this->order);
 
     return $this->db->get($this->table)->result();
   }

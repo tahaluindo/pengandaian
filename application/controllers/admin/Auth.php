@@ -37,15 +37,16 @@ class Auth extends CI_Controller
 
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
-    $this->data['get_all'] = $this->Auth_model->get_all();
-
     $this->data['action']     = 'admin/auth/update_action';
 
     if (is_grandadmin()) {
+      $this->data['get_all'] = $this->Auth_model->get_all();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
     } elseif (is_masteradmin()) {
+      $this->data['get_all'] = $this->Auth_model->get_all_for_masteradmin();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_masteradmin();
     } elseif (is_superadmin()) {
+      $this->data['get_all'] = $this->Auth_model->get_all_for_superadmin();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_for_superadmin();
     }
 
@@ -1095,5 +1096,14 @@ class Auth extends CI_Controller
     $this->data['get_all_data_access'] = $this->Dataaccess_model->get_all();
 
     $this->load->view('back/auth/v_current_access_data', $this->data);
+  }
+
+  function profile()
+  {
+    $this->data['page_title'] = 'Profile ' . $this->data['module'];
+
+    $this->data['user'] = $this->Auth_model->get_by_id($this->session->id_users);
+
+    $this->load->view('back/auth/profile', $this->data);
   }
 }
