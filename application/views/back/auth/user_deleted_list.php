@@ -55,9 +55,9 @@
                                             foreach ($get_all_deleted as $data) {
                                                 // status active
                                                 if ($data->is_active == '1') {
-                                                    $is_active = '<a href="' . base_url('admin/auth/deactivate/' . $data->id_users) . '" class="badge badge-success">ACTIVE</a>';
+                                                    $is_active = '<span class="badge badge-success">ACTIVE</span>';
                                                 } else {
-                                                    $is_active = '<a href="' . base_url('admin/auth/activate/' . $data->id_users) . '" class="badge badge-danger">INACTIVE</a>';
+                                                    $is_active = '<span class="badge badge-danger">INACTIVE</span>';
                                                 }
 
                                                 // Action

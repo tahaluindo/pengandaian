@@ -647,26 +647,26 @@ class Auth extends CI_Controller
   function activate($id)
   {
     if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
     $this->Auth_model->update($this->uri->segment('4'), array('is_active' => '1'));
 
-    $this->session->set_flashdata('message', '<div class="alert alert-success">Akun berhasil diaktifkan</div>');
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Akun Berhasil Diaktifkan</b></h6></div>');
     redirect('admin/auth');
   }
 
   function deactivate($id)
   {
     if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
     $this->Auth_model->update($this->uri->segment('4'), array('is_active' => '0'));
 
-    $this->session->set_flashdata('message', '<div class="alert alert-success">Akun berhasil dinonaktifkan</div>');
+    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Akun Berhasil Dinonaktifkan</b></h6></div>');
     redirect('admin/auth');
   }
 
