@@ -35,6 +35,7 @@ class Auth extends CI_Controller
 
       $usertype_id = $this->Usertype_model->get_by_id($row->usertype_id);
       $instansi_id = $this->Instansi_model->get_by_id($row->instansi_id);
+      $cabang_id = $this->Cabang_model->get_by_id($row->cabang_id);
 
       if (!$row->username) {
         $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
@@ -76,9 +77,11 @@ class Auth extends CI_Controller
           'usertype_id'         => $row->usertype_id,
           'usertype_name'       => $usertype_id->usertype_name,
           'instansi_id'         => $row->instansi_id,
+          'cabang_id'           => $row->cabang_id,
           'instansi_name'       => $instansi_id->instansi_name,
           'instansi_img'        => $instansi_id->instansi_img,
           'instansi_img_thumb'  => $instansi_id->instansi_img_thumb,
+          'cabang_name'         => $cabang_id->cabang_name,
           'photo'               => $row->photo,
           'photo_thumb'         => $row->photo_thumb,
           'created_at'          => $row->created_at,

@@ -38,6 +38,11 @@
                                 <td><b>+<span class="phone"></span></b></td>
                             </tr>
                             <tr>
+                                <td>Cabang</td>
+                                <td>:</td>
+                                <td><b><span class="cabang_name"></span></b></td>
+                            </tr>
+                            <tr>
                                 <td>Jumlah Deposito</td>
                                 <td>:</td>
                                 <td><b>Rp. <span class="total_deposito"></span></b></td>

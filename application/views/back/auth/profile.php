@@ -30,7 +30,7 @@
 
                     <!--Row-->
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <!-- Content -->
                             <div class="card mb-4">
                                 <div class="card-body">
@@ -47,7 +47,7 @@
                                                         <table class="table align-items-center table-flush">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td width="180px">Nama</td>
+                                                                    <td width="230px">Nama</td>
                                                                     <td width="2px">:</td>
                                                                     <td><b><?php echo $this->session->name ?></b></td>
                                                                 </tr>
@@ -96,6 +96,11 @@
                                                                             <span class="badge badge-danger">Nonaktif</span>
                                                                         <?php } ?>
                                                                     </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Cabang</td>
+                                                                    <td>:</td>
+                                                                    <td><b><?php echo $this->session->cabang_name ?></b></td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
