@@ -43,6 +43,11 @@
                                 <td><b>+<span class="phone"></span></b></td>
                             </tr>
                             <tr>
+                                <td>Cabang</td>
+                                <td>:</td>
+                                <td><b><span class="cabang_name"></span></b></td>
+                            </tr>
+                            <tr>
                                 <td>Jumlah Pinjaman</td>
                                 <td>:</td>
                                 <td><b>Rp. <span class="jml_pinjaman"></span></b></td>
