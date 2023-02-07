@@ -41,7 +41,7 @@ class Instansi extends CI_Controller
     is_create();
 
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
@@ -56,14 +56,6 @@ class Instansi extends CI_Controller
       'required'      => '',
       'value'         => $this->form_validation->set_value('instansi_name'),
     ];
-    $this->data['instansi_phone'] = [
-      'name'          => 'instansi_phone',
-      'id'            => 'instansi_phone',
-      'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'required'      => '',
-      'value'         => $this->form_validation->set_value('instansi_phone'),
-    ];
     $this->data['instansi_address'] = [
       'name'          => 'instansi_address',
       'id'            => 'instansi_address',
@@ -71,6 +63,16 @@ class Instansi extends CI_Controller
       'autocomplete'  => 'off',
       'required'      => '',
       'value'         => $this->form_validation->set_value('instansi_address'),
+    ];
+    $this->data['instansi_phone'] = [
+      'name'          => 'instansi_phone',
+      'id'            => 'instansi_phone',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'placeholder'   => '8xxxxxxxxxx',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('instansi_phone'),
+      'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
     ];
     $this->data['active_date'] = [
       'name'          => 'active_date',
@@ -87,17 +89,29 @@ class Instansi extends CI_Controller
   function create_action()
   {
     $this->form_validation->set_rules('instansi_name', 'Nama Instansi', 'trim|required');
-    $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'trim|required');
+    $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'required|is_numeric');
     $this->form_validation->set_rules('instansi_address', 'Alamat', 'trim|required');
-    $this->form_validation->set_rules('active_date', 'Aktif Sampai', 'trim|required');
+    $this->form_validation->set_rules('active_date', 'Aktif Sampai', 'required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
+    $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
+      // Format no telephone
+      $phone = '62' . $this->input->post('instansi_phone');
+
+      $active_date = new DateTime($this->input->post('active_date'));
+      $today = new DateTime(date('Y-m-d'));
+      if ($active_date > $today) {
+        $is_active = 1;
+      } else {
+        $is_active = 0;
+      }
+
       if ($_FILES['photo']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('instansi_name'))) . date('YmdHis');
 
@@ -129,11 +143,11 @@ class Instansi extends CI_Controller
           $data = array(
             'instansi_name'       => $this->input->post('instansi_name'),
             'instansi_address'    => $this->input->post('instansi_address'),
-            'instansi_phone'      => $this->input->post('instansi_phone'),
+            'instansi_phone'      => $phone,
             'active_date'         => $this->input->post('active_date'),
-            'is_active'           => '1',
             'instansi_img'        => $this->upload->data('file_name'),
             'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
+            'is_active'           => $is_active,
             'created_by'          => $this->session->username,
           );
 
@@ -141,16 +155,16 @@ class Instansi extends CI_Controller
 
           write_log();
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
           redirect('admin/instansi');
         }
       } else {
         $data = array(
           'instansi_name'       => $this->input->post('instansi_name'),
           'instansi_address'    => $this->input->post('instansi_address'),
-          'instansi_phone'      => $this->input->post('instansi_phone'),
+          'instansi_phone'      => $phone,
           'active_date'         => $this->input->post('active_date'),
-          'is_active'           => '1',
+          'is_active'           => $is_active,
           'created_by'          => $this->session->username,
         );
 
@@ -158,7 +172,7 @@ class Instansi extends CI_Controller
 
         write_log();
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
         redirect('admin/instansi');
       }
     }

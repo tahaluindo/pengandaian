@@ -71,6 +71,14 @@
                                                     $is_active = '<span class="badge badge-success">Aktif</span>';
                                                 }
 
+                                                // Handle Image
+                                                if ($data->instansi_img_thumb) {
+                                                    $image = '<img src="' . base_url("assets/images/instansi/" . $data->instansi_img_thumb) . '" width="80px" class="img-circle">';
+                                                } else {
+                                                    $image = '<img src="' . base_url("assets/images/noimage.jpg") . '" width="80px" class="img-circle">';
+                                                }
+
+
                                                 // Action
                                                 $edit = '<a href="#" id="editInstansi" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalInstansi" data-id_instansi="' . $data->id_instansi . '" data-instansi_name="' . $data->instansi_name . '" data-instansi_address="' . $data->instansi_address . '" data-instansi_phone="' . $data->instansi_phone . '" data-active_date="' . $data->active_date . '" data-instansi_img="' . $data->instansi_img . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/instansi/delete/' . $data->id_instansi) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
@@ -79,7 +87,7 @@
                                                     <td><?php echo $data->instansi_name ?></td>
                                                     <td><?php echo $data->instansi_address ?></td>
                                                     <td><?php echo $data->instansi_phone ?></td>
-                                                    <td><img src="<?php echo base_url('assets/images/instansi/'.$data->instansi_img_thumb) ?>" width="80px" class="img-circle"></td>
+                                                    <td><?php echo $image ?></td>
                                                     <td style="text-align: center"><?php echo date_indonesian_only($data->active_date) ?></td>
                                                     <td><?php echo $is_active ?></td>
                                                     <td><?php echo $edit ?> <?php echo $delete ?></td>
