@@ -119,6 +119,27 @@ class Deposito extends CI_Controller
         $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
         $this->data['action']     = 'admin/deposito/create_action';
 
+        if (is_grandadmin()) {
+            $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
+        } elseif (is_masteradmin()) {
+            $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
+        }
+
+        $this->data['instansi_id'] = [
+            'name'          => 'instansi_id',
+            'id'            => 'instansi_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'onChange'      => 'tampilCabang()',
+            'value'         => $this->form_validation->set_value('instansi_id'),
+        ];
+        $this->data['cabang_id'] = [
+            'name'          => 'cabang_id',
+            'id'            => 'cabang_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'value'         => $this->form_validation->set_value('cabang_id'),
+        ];
         $this->data['name'] = [
             'name'          => 'name',
             'id'            => 'name',

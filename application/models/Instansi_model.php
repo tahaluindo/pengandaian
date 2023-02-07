@@ -37,7 +37,10 @@ class Instansi_model extends CI_Model{
 
   function get_all_combobox()
   {
+    $this->db->where('is_delete_instansi', '0');
+
     $this->db->order_by('instansi_name');
+
     $data = $this->db->get($this->table);
 
     if($data->num_rows() > 0)

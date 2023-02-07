@@ -37,6 +37,31 @@
                             <?php echo validation_errors() ?>
                             <!-- Content -->
                             <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <?php if (is_grandadmin()) { ?>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Instansi</label>
+                                                    <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Cabang</label>
+                                                    <?php echo form_dropdown('', array('' => '- Pilih Instansi Dulu -'), '', $cabang_id) ?>
+                                                </div>
+                                            </div>
+                                        <?php } elseif (is_masteradmin()) { ?>
+                                            <div class="form-group">
+                                                <label>Cabang</label>
+                                                <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-4">
                                 <?php echo form_open($action) ?>
                                 <div class="card-body">
                                     <div class="row">
@@ -173,6 +198,19 @@
                 todayBtn: 'linked',
             });
         });
+
+        function tampilCabang() {
+            instansi_id = document.getElementById("instansi_id").value;
+            $.ajax({
+                url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
+                success: function(response) {
+                    console.log(response);
+                    $("#cabang_id").html(response);
+                },
+                dataType: "html"
+            });
+            return false;
+        }
     </script>
 </body>
 

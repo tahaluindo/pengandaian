@@ -64,6 +64,63 @@
     }
     ?>
 
+    <?php if (is_grandadmin()) { ?>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Struktur
+        </div>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInstansi" aria-expanded="true"
+                aria-controls="collapsePage">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Instansi</span>
+            </a>
+            <div id="collapseInstansi" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Instansi</h6>
+                    <a class="collapse-item" href="<?php echo base_url('admin/instansi/create') ?>">Tambah Instansi</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/instansi/index') ?>">Data Instansi</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/instansi/deleted_list') ?>">Recycle Bin</a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCabang" aria-expanded="true"
+                aria-controls="collapsePage">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Cabang</span>
+            </a>
+            <div id="collapseCabang" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Cabang</h6>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/create') ?>">Tambah Cabang</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/index') ?>">Data Cabang</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/deleted_list') ?>">Recycle Bin</a>
+                </div>
+            </div>
+        </li>
+    <?php } elseif (is_masteradmin()) { ?>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Struktur
+        </div>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCabang" aria-expanded="true"
+                aria-controls="collapsePage">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Cabang</span>
+            </a>
+            <div id="collapseCabang" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Cabang</h6>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/create') ?>">Tambah Cabang</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/index') ?>">Data Cabang</a>
+                    <a class="collapse-item" href="<?php echo base_url('admin/cabang/deleted_list') ?>">Recycle Bin</a>
+                </div>
+            </div>
+        </li>
+    <?php } ?>
+
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
         Settings
