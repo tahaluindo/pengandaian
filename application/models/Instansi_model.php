@@ -77,7 +77,7 @@ class Instansi_model extends CI_Model{
   {
     $this->db->where('is_delete_instansi', '1');
 
-    $this->db->order_by('instansi_name', $this->order);
+    $this->db->order_by($this->id, $this->order);
 
     return $this->db->get($this->table)->result();
   }

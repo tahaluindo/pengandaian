@@ -427,6 +427,7 @@ class Instansi extends CI_Controller
         'is_delete_instansi'    => '1',
         'deleted_by'            => $this->session->username,
         'deleted_at'            => date('Y-m-d H:i:a'),
+        'is_active'             => '0',
       );
 
       $this->Instansi_model->soft_delete($id, $data);
@@ -470,7 +471,7 @@ class Instansi extends CI_Controller
     is_restore();
 
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
