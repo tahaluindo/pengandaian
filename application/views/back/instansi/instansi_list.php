@@ -80,7 +80,7 @@
 
 
                                                 // Action
-                                                $edit = '<a href="#" id="editInstansi" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalInstansi" data-id_instansi="' . $data->id_instansi . '" data-instansi_name="' . $data->instansi_name . '" data-instansi_address="' . $data->instansi_address . '" data-instansi_phone="' . $data->instansi_phone . '" data-active_date="' . $data->active_date . '" data-instansi_img="' . $data->instansi_img . '"><i class="fas fa-pen"></i></a>';
+                                                $edit = '<a href="#" id="editInstansi" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditInstansi" data-id_instansi="' . $data->id_instansi . '" data-instansi_name="' . $data->instansi_name . '" data-instansi_address="' . $data->instansi_address . '" data-instansi_phone="' . $data->instansi_phone . '" data-active_date="' . $data->active_date . '" data-instansi_img="' . $data->instansi_img . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/instansi/delete/' . $data->id_instansi) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
                                             ?>
                                                 <tr>
@@ -107,7 +107,7 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <?php $this->load->view('back/deposito/modal_edit'); ?>
+                    <?php $this->load->view('back/instansi/modal_edit'); ?>
                     <!-- Modal Edit -->
 
                 </div>
@@ -168,8 +168,39 @@
                 $('#instansi_phone').val(instansi_phone);
                 $('#active_date').val(active_date);
                 $('#instansi_img').val(instansi_img);
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/instansi/current_image/') ?>" + instansi_img,
+                    success: function(data) {
+                        $("#currentImage").html(data);
+                    },
+                });
             });
         });
+
+        function photoPreview(customFile,idpreview) {
+            var gb = customFile.files;
+            for (var i = 0; i < gb.length; i++) {
+                var gbPreview = gb[i];
+                var imageType = /image.*/;
+                var preview=document.getElementById(idpreview);
+                var reader = new FileReader();
+                if (gbPreview.type.match(imageType)) {
+                    //jika tipe data sesuai
+                    preview.file = gbPreview;
+                    reader.onload = (function(element) {
+                        return function(e) {
+                            element.src = e.target.result;
+                        };
+                    })(preview);
+                    //membaca data URL gambar
+                    reader.readAsDataURL(gbPreview);
+                } else {
+                    //jika tipe data tidak sesuai
+                    alert("Tipe file tidak sesuai. Gambar harus bertipe .png, .gif atau .jpg.");
+                }
+            }
+        }
     </script>
 </body>
 

@@ -33,6 +33,48 @@ class Instansi extends CI_Controller
 
     $this->data['get_all'] = $this->Instansi_model->get_all();
 
+    $this->data['action']     = 'admin/instansi/update_action';
+
+    $this->data['id_instansi'] = [
+      'name'          => 'id_instansi',
+      'id'            => 'id_instansi',
+      'type'          => 'hidden',
+    ];
+    $this->data['instansi_name'] = [
+      'name'          => 'instansi_name',
+      'id'            => 'instansi_name',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('instansi_name'),
+    ];
+    $this->data['instansi_address'] = [
+      'name'          => 'instansi_address',
+      'id'            => 'instansi_address',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('instansi_address'),
+    ];
+    $this->data['instansi_phone'] = [
+      'name'          => 'instansi_phone',
+      'id'            => 'instansi_phone',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'placeholder'   => '8xxxxxxxxxx',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('instansi_phone'),
+      'onkeypress'    => 'return event.charCode >= 48 && event.charCode <=57'
+    ];
+    $this->data['active_date'] = [
+      'name'          => 'active_date',
+      'id'            => 'active_date',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('active_date'),
+    ];
+
     $this->load->view('back/instansi/instansi_list', $this->data);
   }
 
@@ -238,23 +280,29 @@ class Instansi extends CI_Controller
 
   function update_action()
   {
-    // $this->form_validation->set_rules('instansi_name', 'Nama Instansi', 'trim|required');
-    $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'trim|required');
+    if (is_grandadmin()) {
+      $this->form_validation->set_rules('instansi_name', 'Nama Instansi', 'trim|required');
+    }
     $this->form_validation->set_rules('instansi_address', 'Alamat', 'trim|required');
+    $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'is_numeric|required');
+    $this->form_validation->set_rules('active_date', 'Status Aktif', 'required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
+    $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-
-    if ($this->input->post('active_date') < date('Y-m-d')) {
-      $is_active = '0';
-    } else {
-      $is_active = '1';
-    }
 
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_instansi'));
     } else {
+      $active_date = new DateTime($this->input->post('active_date'));
+      $today = new DateTime(date('Y-m-d'));
+      if ($active_date >= $today) {
+        $is_active = 1;
+      } else {
+        $is_active = 0;
+      }
+
       if ($_FILES['photo']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('instansi_name'))) . date('YmdHis');
 
@@ -294,107 +342,69 @@ class Instansi extends CI_Controller
           $this->image_lib->resize();
 
           if (is_grandadmin()) {
-            if ($this->input->post('active_date') != NULL) {
-              $data = array(
-                'instansi_name'       => $this->input->post('instansi_name'),
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
-                'active_date'         => $this->input->post('active_date'),
-                'is_active'           => $is_active,
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
-            } else {
-              $data = array(
-                'instansi_name'       => $this->input->post('instansi_name'),
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
-            }
-          } else {
-            if ($this->input->post('active_date') != NULL) {
-              $data = array(
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
-                'active_date'         => $this->input->post('active_date'),
-                'is_active'           => $is_active,
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
-            } else {
-              $data = array(
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
-            }
+            $data = array(
+              'instansi_name'       => $this->input->post('instansi_name'),
+              'instansi_address'    => $this->input->post('instansi_address'),
+              'instansi_phone'      => $this->input->post('instansi_phone'),
+              'active_date'         => $this->input->post('active_date'),
+              'is_active'           => $is_active,
+              'instansi_img'        => $this->upload->data('file_name'),
+              'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
+              'modified_by'         => $this->session->username,
+            );
+          } elseif (is_masteradmin()) {
+            $data = array(
+              'instansi_address'    => $this->input->post('instansi_address'),
+              'instansi_phone'      => $this->input->post('instansi_phone'),
+              'active_date'         => $this->input->post('active_date'),
+              'is_active'           => $is_active,
+              'instansi_img'        => $this->upload->data('file_name'),
+              'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
+              'modified_by'         => $this->session->username,
+            );
           }
 
           $this->Instansi_model->update($this->input->post('id_instansi'), $data);
 
           write_log();
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
 
           if (is_grandadmin()) {
             redirect('admin/instansi');
-          } else {
+          } elseif (is_masteradmin()) {
             redirect('admin/instansi/update/' . $this->session->instansi_id);
           }
         }
       } else {
         if (is_grandadmin()) {
-          if ($this->input->post('active_date') != NULL) {
-            $data = array(
-              'instansi_name'       => $this->input->post('instansi_name'),
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
-              'active_date'         => $this->input->post('active_date'),
-              'is_active'           => $is_active,
-              'modified_by'         => $this->session->username,
-            );
-          } else {
-            $data = array(
-              'instansi_name'       => $this->input->post('instansi_name'),
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
-              'modified_by'         => $this->session->username,
-            );
-          }
-        } else {
-          if ($this->input->post('active_date') != NULL) {
-            $data = array(
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
-              'active_date'         => $this->input->post('active_date'),
-              'is_active'           => $is_active,
-              'modified_by'         => $this->session->username,
-            );
-          } else {
-            $data = array(
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
-              'modified_by'         => $this->session->username,
-            );
-          }
+          $data = array(
+            'instansi_name'       => $this->input->post('instansi_name'),
+            'instansi_address'    => $this->input->post('instansi_address'),
+            'instansi_phone'      => $this->input->post('instansi_phone'),
+            'active_date'         => $this->input->post('active_date'),
+            'is_active'           => $is_active,
+            'modified_by'         => $this->session->username,
+          );
+        } elseif (is_masteradmin()) {
+          $data = array(
+            'instansi_address'    => $this->input->post('instansi_address'),
+            'instansi_phone'      => $this->input->post('instansi_phone'),
+            'active_date'         => $this->input->post('active_date'),
+            'is_active'           => $is_active,
+            'modified_by'         => $this->session->username,
+          );
         }
 
         $this->Instansi_model->update($this->input->post('id_instansi'), $data);
 
         write_log();
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
 
         if (is_grandadmin()) {
           redirect('admin/instansi');
-        } else {
+        } elseif (is_masteradmin()) {
           redirect('admin/instansi/update/' . $this->session->instansi_id);
         }
       }
@@ -499,5 +509,12 @@ class Instansi extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
       redirect('admin/instansi');
     }
+  }
+
+  function current_image($instansi_img)
+  {
+    $this->data['current_image'] = $instansi_img;
+
+    $this->load->view('back/instansi/v_current_image', $this->data);
   }
 }
