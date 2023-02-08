@@ -416,7 +416,7 @@ class Instansi extends CI_Controller
     is_delete();
 
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
@@ -424,19 +424,19 @@ class Instansi extends CI_Controller
 
     if ($delete) {
       $data = array(
-        'is_delete_instansi'   => '1',
-        'deleted_by'        => $this->session->username,
-        'deleted_at'        => date('Y-m-d H:i:a'),
+        'is_delete_instansi'    => '1',
+        'deleted_by'            => $this->session->username,
+        'deleted_at'            => date('Y-m-d H:i:a'),
       );
 
       $this->Instansi_model->soft_delete($id, $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dihapus!</b></h6></div>');
       redirect('admin/instansi');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
       redirect('admin/instansi');
     }
   }
