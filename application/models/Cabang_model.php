@@ -176,7 +176,7 @@ class Cabang_model extends CI_Model{
   {
     $this->db->where('instansi_id', $instansi_id);
     $this->db->where('cabang_name', $cabang_name);
-    
+
     return $this->db->get($this->table)->row();
   }
 

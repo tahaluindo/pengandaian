@@ -23,12 +23,6 @@ class Cabang extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
-
-    if ($this->uri->segment(2) != NULL) {
-      menuaccess_check();
-    } elseif ($this->uri->segment(3) != NULL) {
-      submenuaccess_check();
-    }
   }
 
   function index()
@@ -39,9 +33,8 @@ class Cabang extends CI_Controller
 
     if (is_grandadmin()) {
       $this->data['get_all'] = $this->Cabang_model->get_all();
-    }
-    if (is_masteradmin()) {
-      $this->data['get_all'] = $this->Cabang_model->get_all_by_instansi($this->session->instansi_id);
+    } elseif (is_masteradmin()) {
+      $this->data['get_all'] = $this->Cabang_model->get_all_by_instansi();
     }
 
     $this->load->view('back/cabang/cabang_list', $this->data);
