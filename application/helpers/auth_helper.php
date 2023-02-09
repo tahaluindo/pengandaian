@@ -8,7 +8,7 @@ function is_login()
   $username = $CI->session->username;
 
   if ($username == NULL) {
-    $CI->session->set_flashdata('message', '<div class="alert alert-danger">Anda harus login dulu</div>');
+    $CI->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Anda harus login dulu</b></h6></div>');
 
     redirect('auth/login');
   }
@@ -21,7 +21,7 @@ function is_login_front()
   $username = $CI->session->username;
 
   if ($username == NULL) {
-    $CI->session->set_flashdata('message', '<div class="alert alert-danger">Anda harus login dulu</div>');
+    $CI->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Anda harus login dulu</b></h6></div>');
 
     redirect('auth/login');
   }

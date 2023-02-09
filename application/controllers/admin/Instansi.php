@@ -487,27 +487,36 @@ class Instansi extends CI_Controller
     is_restore();
 
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki akses</div>');
       redirect('admin/dashboard');
     }
 
     $row = $this->Instansi_model->get_by_id($id);
 
     if ($row) {
+      $active_date = new DateTime($row->active_date);
+      $today = new DateTime(date('Y-m-d'));
+      if ($active_date >= $today) {
+        $is_active = 1;
+      } else {
+        $is_active = 0;
+      }
+
       $data = array(
-        'is_delete_instansi'   => '0',
-        'deleted_by'        => NULL,
-        'deleted_at'        => NULL,
+        'is_delete_instansi'    => '0',
+        'deleted_by'            => NULL,
+        'deleted_at'            => NULL,
+        'is_active'             => $is_active,
       );
 
       $this->Instansi_model->update($id, $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dikembalikan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Berhasil Dikembalikan!</b></h6></div>');
       redirect('admin/instansi/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Data Tidak Ditemukan!</b></h6></div>');
       redirect('admin/instansi');
     }
   }
