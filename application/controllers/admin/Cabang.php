@@ -53,7 +53,7 @@ class Cabang extends CI_Controller
       'name'          => 'cabang_name',
       'id'            => 'cabang_name',
       'class'         => 'form-control',
-      // 'autocomplete'  => 'off',
+      'autocomplete'  => 'off',
       'required'      => '',
       'value'         => $this->form_validation->set_value('cabang_name'),
     ];
@@ -86,7 +86,8 @@ class Cabang extends CI_Controller
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } elseif ($this->input->post('cabang_name') === $this->data['check_by_name_and_instansi']->cabang_name) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Nama ' . $this->data['module'] . ' telah ada, silahkan ganti yang lain</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-ban"></i><b> Nama ' . $this->data['module'] . ' telah ada, silahkan ganti yang lain</b></h6></div>');
+
       $this->create();
     } else {
       $data = array(
@@ -99,7 +100,7 @@ class Cabang extends CI_Controller
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
       redirect('admin/cabang');
     }
   }
