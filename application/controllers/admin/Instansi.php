@@ -293,7 +293,7 @@ class Instansi extends CI_Controller
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
     if ($this->form_validation->run() === FALSE) {
-      $this->update($this->input->post('id_instansi'));
+      $this->index();
     } else {
       $active_date = new DateTime($this->input->post('active_date'));
       $today = new DateTime(date('Y-m-d'));

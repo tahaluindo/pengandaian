@@ -56,7 +56,7 @@
                                             <?php
                                             foreach ($get_all as $data) {
                                                 // Action
-                                                $edit = '<a href="#" id="editCabang" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditCabang" data-id_cabang="' . $data->id_cabang . '" data-cabang_name="' . $data->cabang_name . '"><i class="fas fa-pen"></i></a>';
+                                                $edit = '<a href="#" id="editCabang" class="btn btn-sm btn-warning" title="Edit Data" data-toggle="modal" data-target="#modalEditCabang" data-id_cabang="' . $data->id_cabang . '" data-cabang_name="' . $data->cabang_name . '" data-instansi_id="' . $data->instansi_id . '"><i class="fas fa-pen"></i></a>';
                                                 $delete = '<a href="' . base_url('admin/cabang/delete/' . $data->id_cabang) . '" id="delete-button" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fas fa-trash"></i></a>';
                                             ?>
                                                 <tr>
@@ -81,7 +81,7 @@
                     <!-- Modal Logout -->
 
                     <!-- Modal Edit -->
-                    <?php //$this->load->view('back/cabang/modal_edit'); ?>
+                    <?php $this->load->view('back/cabang/modal_edit'); ?>
                     <!-- Modal Edit -->
 
                 </div>
@@ -116,8 +116,10 @@
             $(document).on('click', '#editCabang', function() {
                 const id_cabang = $(this).data('id_cabang');
                 const cabang_name = $(this).data('cabang_name');
+                const instansi_id = $(this).data('instansi_id');
                 $('#id_cabang').val(id_cabang);
                 $('#cabang_name').val(cabang_name);
+                $('#instansi_id').val(instansi_id);
             });
         });
     </script>

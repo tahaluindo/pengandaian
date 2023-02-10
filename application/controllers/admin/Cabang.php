@@ -30,12 +30,35 @@ class Cabang extends CI_Controller
     is_read();
 
     $this->data['page_title'] = 'Data ' . $this->data['module'];
+    $this->data['action']     = 'admin/cabang/update_action';
 
     if (is_grandadmin()) {
       $this->data['get_all'] = $this->Cabang_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Cabang_model->get_all_by_instansi();
     }
+
+    $this->data['get_all_combobox_instansi']  = $this->Instansi_model->get_all_combobox();
+
+    $this->data['id_cabang'] = [
+      'name'          => 'id_cabang',
+      'id'            => 'id_cabang',
+      'type'          => 'hidden',
+    ];
+    $this->data['cabang_name'] = [
+      'name'          => 'cabang_name',
+      'id'            => 'cabang_name',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('cabang_name'),
+    ];
+    $this->data['instansi_id'] = [
+      'name'          => 'instansi_id',
+      'id'            => 'instansi_id',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
 
     $this->load->view('back/cabang/cabang_list', $this->data);
   }
@@ -162,7 +185,7 @@ class Cabang extends CI_Controller
     }
 
     if ($this->form_validation->run() === FALSE) {
-      $this->update($this->input->post('id_cabang'));
+      $this->index();
     } else {
       $data = array(
         'cabang_name'     => $this->input->post('cabang_name'),
@@ -174,7 +197,7 @@ class Cabang extends CI_Controller
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h6 style="margin-top: 3px; margin-bottom: 3px;"><i class="fas fa-check"></i><b> Data Berhasil Disimpan!</b></h6></div>');
       redirect('admin/cabang');
     }
   }
