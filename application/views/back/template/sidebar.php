@@ -72,7 +72,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInstansi" aria-expanded="true"
                 aria-controls="collapsePage">
-                <i class="fas fa-fw fa-users"></i>
+                <i class="fas fa-fw fa-network-wired"></i>
                 <span>Instansi</span>
             </a>
             <div id="collapseInstansi" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
@@ -87,7 +87,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCabang" aria-expanded="true"
                 aria-controls="collapsePage">
-                <i class="fas fa-fw fa-users"></i>
+                <i class="fas fa-fw fa-network-wired"></i>
                 <span>Cabang</span>
             </a>
             <div id="collapseCabang" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
@@ -107,7 +107,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCabang" aria-expanded="true"
                 aria-controls="collapsePage">
-                <i class="fas fa-fw fa-users"></i>
+                <i class="fas fa-fw fa-network-wired"></i>
                 <span>Cabang</span>
             </a>
             <div id="collapseCabang" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
