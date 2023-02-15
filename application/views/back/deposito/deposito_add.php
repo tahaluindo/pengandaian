@@ -36,6 +36,7 @@
                             } ?>
                             <?php echo validation_errors() ?>
                             <!-- Content -->
+                            <?php echo form_open($action) ?>
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <div class="row">
@@ -53,16 +54,17 @@
                                                 </div>
                                             </div>
                                         <?php } elseif (is_masteradmin()) { ?>
-                                            <div class="form-group">
-                                                <label>Cabang</label>
-                                                <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Cabang</label>
+                                                    <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
+                                                </div>
                                             </div>
                                         <?php } ?>
                                     </div>
                                 </div>
                             </div>
                             <div class="card mb-4">
-                                <?php echo form_open($action) ?>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -137,8 +139,8 @@
                                     <button type="reset" class="btn btn-warning"><?php echo $btn_reset ?></button>
                                     <button type="submit" class="btn btn-primary"><?php echo $btn_submit ?></button>
                                 </div>
-                                <?php echo form_close() ?>
                             </div>
+                            <?php echo form_close() ?>
                             <!-- Content -->
                         </div>
                     </div>
@@ -204,7 +206,6 @@
             $.ajax({
                 url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
                 success: function(response) {
-                    console.log(response);
                     $("#cabang_id").html(response);
                 },
                 dataType: "html"

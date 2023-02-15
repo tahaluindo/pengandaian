@@ -213,6 +213,12 @@ class Deposito extends CI_Controller
 
     function create_action()
     {
+        if (is_grandadmin()) {
+            $this->form_validation->set_rules('instansi_id', 'Instansi', 'required');
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        } elseif (is_masteradmin()) {
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        }
         $this->form_validation->set_rules('name', 'Nama Deposan', 'trim|required');
         $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('address', 'Alamat', 'required');
@@ -243,13 +249,22 @@ class Deposito extends CI_Controller
             $jatuh_tempo = date("Y", strtotime($this->input->post('jatuh_tempo')));
             $jangka_waktu_deposito = $jatuh_tempo - $waktu_deposito;
 
+            if (is_grandadmin()) {
+                $instansi = $this->input->post('instansi_id');
+                $cabang = $this->input->post('cabang_id');
+            } elseif (is_masteradmin()) {
+                $instansi = $this->session->instansi_id;
+                $cabang = $this->input->post('cabang_id');
+            }
+
             $data = array(
                 'name'              => $this->input->post('name'),
                 'nik'               => $this->input->post('nik'),
                 'address'           => $this->input->post('address'),
                 'email'             => $this->input->post('email'),
                 'phone'             => $phone,
-                'instansi_id'       => $this->session->instansi_id,
+                'instansi_id'       => $instansi,
+                'cabang_id'         => $cabang,
                 'total_deposito'    => (int) $total_deposito,
                 'saldo_deposito'    => (int) $total_deposito,
                 'jangka_waktu'      => $jangka_waktu_deposito,

@@ -64,9 +64,7 @@ class Cabang_model extends CI_Model{
         $result['']= '- Silahkan Pilih Cabang -';
         $result[$row['id_cabang']]= ucwords(strtolower($row['cabang_name']));
       }
-    }
-    else
-    {
+    } else {
 		  $result['-']= '- Belum Ada Cabang -';
 		}
     return $result;
