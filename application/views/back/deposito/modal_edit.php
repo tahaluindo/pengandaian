@@ -10,6 +10,10 @@
             <?php echo form_open($action) ?>
             <div class="modal-body">
                 <!-- Content -->
+                <?php if (is_grandadmin() or is_masteradmin()) { ?>
+                <div id="showComponent"></div>
+                <hr><br>
+                <?php } ?>
                 <div class="form-group">
                     <label>Nama Deposan</label>
                     <?php echo form_input($name) ?>

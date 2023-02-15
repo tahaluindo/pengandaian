@@ -178,6 +178,13 @@
                 $('#total_deposito').val(total_deposito);
                 $('#waktu_deposito').val(waktu_deposito);
                 $('#jatuh_tempo').val(jatuh_tempo);
+
+                jQuery.ajax({
+                    url: "<?php echo base_url('admin/deposito/component_dropdown/') ?>" + id_deposito,
+                    success: function(data) {
+                        $("#showComponent").html(data);
+                    },
+                });
             });
 
             $(document).on('click', '#detailDeposito', function() {
@@ -234,6 +241,18 @@
                 });
             });
         });
+
+        function tampilCabang() {
+            instansi_id = document.getElementById("instansi_id").value;
+            $.ajax({
+                url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
+                success: function(response) {
+                    $("#cabang_id").html(response);
+                },
+                dataType: "html"
+            });
+            return false;
+        }
     </script>
 </body>
 

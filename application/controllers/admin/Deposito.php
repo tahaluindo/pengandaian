@@ -284,6 +284,12 @@ class Deposito extends CI_Controller
 
     function update_action()
     {
+        if (is_grandadmin()) {
+            $this->form_validation->set_rules('instansi_id', 'Instansi', 'required');
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        } elseif (is_masteradmin()) {
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        }
         $this->form_validation->set_rules('name', 'Nama Deposan', 'trim|required');
         $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('address', 'Alamat', 'required');
@@ -311,19 +317,28 @@ class Deposito extends CI_Controller
             $jatuh_tempo = date("Y", strtotime($this->input->post('jatuh_tempo')));
             $jangka_waktu_deposito = $jatuh_tempo - $waktu_deposito;
 
+            if (is_grandadmin()) {
+                $instansi = $this->input->post('instansi_id');
+                $cabang = $this->input->post('cabang_id');
+            } elseif (is_masteradmin()) {
+                $instansi = $this->session->instansi_id;
+                $cabang = $this->input->post('cabang_id');
+            }
+
             $data = array(
                 'name'              => $this->input->post('name'),
                 'nik'               => $this->input->post('nik'),
                 'address'           => $this->input->post('address'),
                 'email'             => $this->input->post('email'),
                 'phone'             => $this->input->post('phone'),
+                'instansi_id'       => $instansi,
+                'cabang_id'         => $cabang,
                 'total_deposito'    => (int) $total_deposito,
                 'resapan_deposito'  => 0,
                 'saldo_deposito'    => (int) $total_deposito,
                 'jangka_waktu'      => $jangka_waktu_deposito,
                 'waktu_deposito'    => $this->input->post('waktu_deposito'),
                 'jatuh_tempo'       => $this->input->post('jatuh_tempo'),
-                'instansi_id'       => $this->session->instansi_id,
                 'modified_by'       => $this->session->username,
             );
 
@@ -431,5 +446,35 @@ class Deposito extends CI_Controller
         $this->data['pengguna_dana'] = $this->Sumberdana_model->get_pengguna_dana_by_deposan($id_deposito);
 
         $this->load->view('back/deposito/v_pengguna_dana_by_deposan_list', $this->data);
+    }
+
+    function component_dropdown($id_deposito)
+    {
+        $this->data['deposito'] = $this->Deposito_model->get_by_id($id_deposito);
+
+        if (is_grandadmin()) {
+            $this->data['get_all_combobox_instansi'] = $this->Instansi_model->get_all_combobox();
+            $this->data['get_all_combobox_cabang'] = $this->Cabang_model->get_all_combobox_by_instansi($this->data['deposito']->instansi_id);
+        } elseif (is_masteradmin()) {
+            $this->data['get_all_combobox_cabang'] = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
+        }
+
+        $this->data['instansi_id'] = [
+            'name'          => 'instansi_id',
+            'id'            => 'instansi_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'onChange'      => 'tampilCabang()',
+            'value'         => $this->form_validation->set_value('instansi_id'),
+        ];
+        $this->data['cabang_id'] = [
+            'name'          => 'cabang_id',
+            'id'            => 'cabang_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'value'         => $this->form_validation->set_value('cabang_id'),
+        ];
+
+        $this->load->view('back/deposito/v_component_dropdown', $this->data);
     }
 }
