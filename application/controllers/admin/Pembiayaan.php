@@ -156,6 +156,27 @@ class Pembiayaan extends CI_Controller
         $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
         $this->data['action']     = 'admin/pembiayaan/create_forward';
 
+        if (is_grandadmin()) {
+            $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
+        } elseif (is_masteradmin()) {
+            $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
+        }
+
+        $this->data['instansi_id'] = [
+            'name'          => 'instansi_id',
+            'id'            => 'instansi_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'onChange'      => 'tampilCabang()',
+            'value'         => $this->form_validation->set_value('instansi_id'),
+        ];
+        $this->data['cabang_id'] = [
+            'name'          => 'cabang_id',
+            'id'            => 'cabang_id',
+            'class'         => 'form-control',
+            'required'      => '',
+            'value'         => $this->form_validation->set_value('cabang_id'),
+        ];
         $this->data['name'] = [
             'name'          => 'name',
             'id'            => 'name',
@@ -280,6 +301,12 @@ class Pembiayaan extends CI_Controller
 
     function create_forward()
     {
+        if (is_grandadmin()) {
+            $this->form_validation->set_rules('instansi_id', 'Instansi', 'required');
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        } elseif (is_masteradmin()) {
+            $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
+        }
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
         $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('address', 'Alamat', 'required');
@@ -350,6 +377,14 @@ class Pembiayaan extends CI_Controller
                     //Format no telephone
                     $phone = '62' . $this->input->post('phone');
 
+                    if (is_grandadmin()) {
+                        $instansi = $this->input->post('instansi_id');
+                        $cabang = $this->input->post('cabang_id');
+                    } elseif (is_masteradmin()) {
+                        $instansi = $this->session->instansi_id;
+                        $cabang = $this->input->post('cabang_id');
+                    }
+
                     $data = array(
                         'no_pinjaman'               => $no_pinjaman,
                         'name'                      => $this->input->post('name'),
@@ -357,7 +392,8 @@ class Pembiayaan extends CI_Controller
                         'address'                   => $this->input->post('address'),
                         'email'                     => $this->input->post('email'),
                         'phone'                     => $phone,
-                        'instansi_id'               => $this->session->instansi_id,
+                        'instansi_id'               => $instansi,
+                        'cabang_id'                 => $cabang,
                         'jml_pinjaman'              => (int) $jml_pinjaman,
                         'jangka_waktu_pinjam'       => $this->input->post('jangka_waktu_pinjam'),
                         'jenis_barang_gadai'        => $this->input->post('jenis_barang_gadai'),
